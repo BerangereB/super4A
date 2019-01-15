@@ -8,6 +8,7 @@
 - Courreau Quentin
 
 
-Liens utiles :
+## Liens utiles :
 
 - https://maven.apache.org/guides/mini/guide-creating-archetypes.html
+- https://atom.io/packages/editorconfig
