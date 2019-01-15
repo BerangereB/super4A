@@ -1,3 +1,4 @@
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,6 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
 	@Test
 	void main() {
-		assert(true==true);
+		Assertions.assertThat(true).isTrue();
 	}
 }
