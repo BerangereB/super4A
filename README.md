@@ -1,14 +1,17 @@
-# Super4A - ReadMe
+# Super4A - ReadMe 
 
-## Projet architecture logicielle :
+[![Build Status](https://travis-ci.org/BerangereB/super4A.svg?branch=master)](https://travis-ci.org/BerangereB/super4A)
 
-- Bourdoulous Bérangère, 
-- Kaan Dageri Michael
-- Baille Angélique,
-- Courreau Quentin
 
+- BOURDOULOUS Bérangère 
+- DAGERI Kaan Michaël
+- BAILLE Angélique
+- COURREAU Quentin
 
 ## Liens utiles :
 
 - https://maven.apache.org/guides/mini/guide-creating-archetypes.html
 - https://atom.io/packages/editorconfig
+
+
+
