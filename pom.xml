@@ -8,5 +8,12 @@
     <artifactId>super4A</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.1.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
