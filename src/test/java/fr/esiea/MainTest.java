@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
 	@Test
 	void main() {
+		Main.main(new String[]{});
 		Assertions.assertThat(true).isTrue();
 	}
 }
