@@ -16,7 +16,6 @@ public class Product {
 		return name;
 	}
 
-
 	public ProductUnit getUnit() {
 		return unit;
 	}

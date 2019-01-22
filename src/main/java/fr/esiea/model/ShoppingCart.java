@@ -52,7 +52,6 @@ public class ShoppingCart {
 						double total = offer.argument * quantityAsInt / x + quantityAsInt % 2 * unitPrice;
 						double discountN = unitPrice * quantity - total;
 						discount = new Discount(p, "2 for " + offer.argument, discountN);
-						//System.out.println("discount " + discountN);
 					}
 
 				} if (offer.offerType == SpecialOfferType.FiveForAmount) {
@@ -73,7 +72,6 @@ public class ShoppingCart {
 				if (discount != null)
 					receipt.addDiscount(discount);
 			}
-
 		}
 	}
 }

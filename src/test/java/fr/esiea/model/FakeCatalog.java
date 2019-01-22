@@ -13,6 +13,7 @@ public class FakeCatalog implements SupermarketCatalog {
 		this.prices.put(product.getName(), price);
 	}
 
+	//TODO: add try/catch when prices is null > Double to double conversion
 	public double getUnitPrice(Product p) {
 		return this.prices.get(p.getName());
 	}
