@@ -20,13 +20,13 @@ public class Product {
 		return unit;
 	}
 
+	/*
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return Objects.equals(name, product.name) &&
-			unit == product.unit;
+		return Objects.equals(name, product.name) && unit == product.unit;
 	}
 
 	@Override
@@ -34,4 +34,5 @@ public class Product {
 
 		return Objects.hash(name, unit);
 	}
+	*/
 }

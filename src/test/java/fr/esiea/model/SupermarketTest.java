@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SupermarketTest {
 
@@ -215,6 +217,30 @@ class SupermarketTest {
 		double current = receipt.getTotalPrice();
 
 		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
+
+	@Test
+	public void testEqualsAndHashCode_of_Product() {
+		final Product p = new Product("banana",ProductUnit.Kilo);
+		final Product p1 = new Product("banana", p.getUnit());
+		assertEquals(p, p1);
+		assertEquals(p,p);
+		assertNotEquals(p,null);
+		assertNotEquals(p, new ReceiptPrinter());
+		assertNotEquals(p,new Product("apples",ProductUnit.Kilo));
+	}
+
+	@Test
+	public void testEqualsAndHashCode_of_ReceiptItem() {
+		final Product p = new Product("banana",ProductUnit.Kilo);
+		final ReceiptItem receiptItem = new ReceiptItem(p,2,2,4);
+
+		assertEquals(receiptItem,receiptItem);
+		assertNotEquals(receiptItem,null);
+		assertNotEquals(receiptItem, new ReceiptPrinter());
+		assertNotEquals(receiptItem,new ReceiptItem(p,2,2,6));
+		assertNotEquals(receiptItem,new ReceiptItem(new Product("apples",ProductUnit.Kilo),2,2,6));
 	}
 
 
