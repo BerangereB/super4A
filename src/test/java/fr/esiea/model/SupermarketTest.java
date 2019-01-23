@@ -4,6 +4,7 @@ package fr.esiea.model;
 import fr.esiea.ReceiptPrinter;
 import org.junit.jupiter.api.Test;
 
+
 import static org.assertj.core.api.Assertions.*;
 
 class SupermarketTest {
@@ -146,20 +147,28 @@ class SupermarketTest {
 		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
 	}
 
+
+	/*
+	** Buy 3 toothbrushes for the price of two
+	 * And 1Kilo of apples
+	 */
 	@Test
 	void receiptPrinter() {
 		final double 	price = 0.99;
 		final int 		quantity = 3;
-		final double 	expected = 2 * price;
+		final double 	expected = 2 * price + 2.99;
 		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	apples = new Product("apples", ProductUnit.Kilo);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush, price);
+		catalog.addProduct(apples, 2.99);
 		teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0.99);
 		cart.addItemQuantity(toothbrush, quantity);
+		cart.addItemQuantity(apples, 1);
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		double current = receipt.getTotalPrice();
@@ -168,4 +177,7 @@ class SupermarketTest {
 		assertThat(current).isEqualTo(expected, within(0.001));
 
 	}
+
+
+
 }
