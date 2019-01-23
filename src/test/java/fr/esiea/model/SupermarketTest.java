@@ -178,6 +178,45 @@ class SupermarketTest {
 
 	}
 
+	@Test
+	void AllSpecialOfferTypeAvailable_receiptDiscount_should_be_null(){
+		final double 	toothbrush_price = 0.99; // offer two for amount
+		final int 		toothbrush_quantity = 1;
+
+		final double 	spoon_price = 1.99; // offer three for two
+		final int 		spoon_quantity = 2;
+
+		final double 	avocado_price = 1.2; //Five for amount
+		final int 		avocado_quantity = 4;
+
+		final double 	expected = toothbrush_price * toothbrush_quantity + spoon_price * spoon_quantity + avocado_price * avocado_quantity;
+
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	spoon = new Product("spoon", ProductUnit.Each);
+		final Product 	avocado = new Product("avocado", ProductUnit.Each);
+
+		SupermarketCatalog catalog = new FakeCatalog();
+		Teller teller = new Teller(catalog);
+		ShoppingCart cart = new ShoppingCart();
+
+		catalog.addProduct(toothbrush, toothbrush_price);
+		catalog.addProduct(spoon, spoon_price);
+		catalog.addProduct(avocado, avocado_price);
+
+		teller.addSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, 1.5);
+		teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, spoon,spoon_price);
+		teller.addSpecialOffer(SpecialOfferType.FiveForAmount, avocado, 5.5);
+
+		cart.addItemQuantity(toothbrush, toothbrush_quantity);
+		cart.addItemQuantity(spoon, spoon_quantity);
+		cart.addItemQuantity(avocado, avocado_quantity);
+
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+		double current = receipt.getTotalPrice();
+
+		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
 
 
 }
