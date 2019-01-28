@@ -1,13 +1,6 @@
 package fr.esiea.model;
 
-public class Offer {
-	public final SpecialOfferType offerType;
-	public final Product product;
-	public final double argument;
+public interface Offer {
 
-	public Offer(SpecialOfferType offerType, Product product, double argument) {
-		this.offerType = offerType;
-		this.argument = argument;
-		this.product = product;
-	}
+	Discount getDiscount(Product p, double quantity, double unitPrice);
 }
