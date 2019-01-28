@@ -1,0 +1,13 @@
+
+***** Pull discarding local changes *****
+git reset --hard
+git pull
+
+
+**** Delete the last commit push ********
+git reset --hard HEAD~ => (supprimé localement) 
+git push origin +master => (supprimé sur le repo distant)
+
+
+
+
