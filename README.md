@@ -5,17 +5,15 @@
 [![codecov](https://codecov.io/gh/BerangereB/super4A/branch/master/graph/badge.svg)](https://codecov.io/gh/BerangereB/super4A)
 
 
-## Projet architecture logicielle :
+## Project team members
 
-- BOURDOULOUS Bérangère 
-- DAGERI Kaan Michaël
-- BAILLE Angélique
-- COURREAU Quentin
+- BOURDOULOUS Bérangère (BerangereB)
+- DAGERI Kaan Michaël (kkaann)
+- BAILLE Angélique (BAngelique)
+- COURREAU Quentin (9QC)
 
-## Liens utiles :
+
+## Useful links
 
 - https://maven.apache.org/guides/mini/guide-creating-archetypes.html
 - https://atom.io/packages/editorconfig
-
-
-
