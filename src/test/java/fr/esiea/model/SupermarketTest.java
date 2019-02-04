@@ -334,4 +334,46 @@ class SupermarketTest {
 
 		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
 	}
+
+
+
+	@Test
+	void testPercentBundleOffer_and_AmountBundleOffer_false(){
+		final double 	toothbrush_price = 0.99;
+		final int 		toothbrush_quantity = 1;
+
+		final double 	toothpaste_price = 1.20;
+		final int 		toothpaste_quantity = 2;
+
+		final double percentage = 50;
+		final double amount = 2;
+
+		final double 	expected = toothbrush_price*toothbrush_quantity + toothpaste_price*toothpaste_quantity;
+
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+
+		SupermarketCatalog catalog = new FakeCatalog();
+		Teller teller = new Teller(catalog);
+		ShoppingCart cart = new ShoppingCart();
+
+		catalog.addProduct(toothbrush, toothbrush_price);
+		catalog.addProduct(toothpaste, toothpaste_price);
+
+		Map<Product,Integer> products = new HashMap<Product,Integer>();
+		products.put(toothbrush,2);products.put(toothpaste,1);
+
+		teller.addSpecialOffer(new PercentBundleOffer(products,percentage));
+		teller.addSpecialOffer(new AmountBundleOffer(products,amount));
+
+
+		cart.addItemQuantity(toothbrush, toothbrush_quantity);
+		cart.addItemQuantity(toothpaste,toothpaste_quantity);
+
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+		double current = receipt.getTotalPrice();
+
+
+		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
 }
