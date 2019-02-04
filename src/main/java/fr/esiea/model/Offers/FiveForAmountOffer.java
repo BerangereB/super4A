@@ -1,6 +1,9 @@
-package fr.esiea.model;
+package fr.esiea.model.Offers;
 
-import java.util.Dictionary;
+import fr.esiea.model.Discount;
+import fr.esiea.model.Product;
+import fr.esiea.model.SupermarketCatalog;
+
 import java.util.Map;
 
 public class FiveForAmountOffer implements Offer {
@@ -14,7 +17,6 @@ public class FiveForAmountOffer implements Offer {
 		this.product = product;
 	}
 
-	private double quantity;
 
 	@Override
 	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {

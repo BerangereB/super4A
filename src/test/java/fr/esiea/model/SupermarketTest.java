@@ -2,8 +2,12 @@ package fr.esiea.model;
 
 
 import fr.esiea.ReceiptPrinter;
+import fr.esiea.model.Offers.*;
 import org.junit.jupiter.api.Test;
 
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -213,6 +217,120 @@ class SupermarketTest {
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		double current = receipt.getTotalPrice();
+
+		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
+
+
+	@Test
+	void testAmountBundleOffer_2_toothbrush_and_1_toothpaste_for_2(){
+		final double 	toothbrush_price = 0.99;
+		final int 		toothbrush_quantity = 3;
+
+		final double 	toothpaste_price = 1.20;
+		final int 		toothpaste_quantity = 2;
+
+		final double amount = 2.0;
+
+		final double 	expected = toothbrush_price  + toothpaste_price + amount;
+
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+
+		SupermarketCatalog catalog = new FakeCatalog();
+		Teller teller = new Teller(catalog);
+		ShoppingCart cart = new ShoppingCart();
+
+		catalog.addProduct(toothbrush, toothbrush_price);
+		catalog.addProduct(toothpaste, toothpaste_price);
+
+		Map<Product,Integer> products = new HashMap<Product,Integer>();
+		products.put(toothbrush,2);products.put(toothpaste,1);
+		teller.addSpecialOffer(new AmountBundleOffer(products,amount));
+
+		cart.addItemQuantity(toothbrush, toothbrush_quantity);
+		cart.addItemQuantity(toothpaste,toothpaste_quantity);
+
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+		double current = receipt.getTotalPrice();
+
+		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
+
+
+	@Test
+	void testPercentBundleOffer_2_toothbrush_and_1_toothpaste_for_50_percent_discount(){
+		final double 	toothbrush_price = 0.99;
+		final int 		toothbrush_quantity = 3;
+
+		final double 	toothpaste_price = 1.20;
+		final int 		toothpaste_quantity = 2;
+
+		final double percentage = 50;
+
+		final double 	expected = toothbrush_price + toothpaste_price + ((toothbrush_quantity-1)*toothbrush_price +  (toothpaste_quantity-1)*toothpaste_price)*0.5;
+
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+
+		SupermarketCatalog catalog = new FakeCatalog();
+		Teller teller = new Teller(catalog);
+		ShoppingCart cart = new ShoppingCart();
+
+		catalog.addProduct(toothbrush, toothbrush_price);
+		catalog.addProduct(toothpaste, toothpaste_price);
+
+		Map<Product,Integer> products = new HashMap<Product,Integer>();
+		products.put(toothbrush,2);products.put(toothpaste,1);
+		teller.addSpecialOffer(new PercentBundleOffer(products,percentage));
+
+		cart.addItemQuantity(toothbrush, toothbrush_quantity);
+		cart.addItemQuantity(toothpaste,toothpaste_quantity);
+
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+		double current = receipt.getTotalPrice();
+
+		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
+
+	@Test
+	void testPercentBundleOffer_2_toothbrush_and_1_toothpaste_for_50_percent_discount_WITH_3_for_2_toothbrush_offer_WITH_3_for_2_toothpaste_offer_(){
+		final double 	toothbrush_price = 0.99;
+		final int 		toothbrush_quantity = 5;
+
+		final double 	toothpaste_price = 1.20;
+		final int 		toothpaste_quantity = 2;
+
+		final double percentage = 50;
+									// bundle offer								 + 3 for 2 toothbrush   + reste
+		final double 	expected = (2*toothbrush_price +  toothpaste_price)*0.5 + toothbrush_price*2 + toothpaste_price;
+
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+
+		SupermarketCatalog catalog = new FakeCatalog();
+		Teller teller = new Teller(catalog);
+		ShoppingCart cart = new ShoppingCart();
+
+		catalog.addProduct(toothbrush, toothbrush_price);
+		catalog.addProduct(toothpaste, toothpaste_price);
+
+		Map<Product,Integer> products = new HashMap<Product,Integer>();
+		products.put(toothbrush,2);products.put(toothpaste,1);
+		teller.addSpecialOffer(new PercentBundleOffer(products,percentage));
+
+		teller.addSpecialOffer(new ThreeForTwoOffer(toothbrush));
+		teller.addSpecialOffer(new ThreeForTwoOffer(toothpaste));
+
+		cart.addItemQuantity(toothbrush, toothbrush_quantity);
+		cart.addItemQuantity(toothpaste,toothpaste_quantity);
+
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+		double current = receipt.getTotalPrice();
+
 
 		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
 	}

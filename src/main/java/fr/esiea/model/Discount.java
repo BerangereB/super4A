@@ -11,6 +11,7 @@ public class Discount {
 		this.discountAmount = discountAmount;
 	}
 
+
 	public String getDescription() {
 		return description;
 	}

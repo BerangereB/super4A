@@ -15,7 +15,6 @@ public class Receipt {
 		}
 		for (Discount discount : this.discounts) {
 			total -= discount.getDiscountAmount();
-
 		}
 		return total;
 	}

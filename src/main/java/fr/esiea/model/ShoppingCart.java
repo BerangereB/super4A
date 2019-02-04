@@ -1,6 +1,8 @@
 package fr.esiea.model;
 
 
+import fr.esiea.model.Offers.Offer;
+
 import java.util.*;
 
 public class ShoppingCart {
