@@ -8,7 +8,7 @@ import java.util.Map;
 public class Teller {
 
 	private final SupermarketCatalog catalog;
-	private Map<Product[], Offer> offers = new HashMap<>();
+	private Map<Product[], Offer> offers = new HashMap<Product[], Offer>();
 
 	public Teller(SupermarketCatalog catalog) {
 		this.catalog = catalog;
