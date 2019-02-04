@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Receipt {
-	private List<ReceiptItem> items = new ArrayList<ReceiptItem>();
-	private List<Discount> discounts = new ArrayList<Discount>();
+	private List<ReceiptItem> items = new ArrayList<>();
+	private List<Discount> discounts = new ArrayList<>();
 
 	public Double getTotalPrice() {
 		double total = 0.0;
@@ -15,6 +15,7 @@ public class Receipt {
 		}
 		for (Discount discount : this.discounts) {
 			total -= discount.getDiscountAmount();
+
 		}
 		return total;
 	}
@@ -24,7 +25,7 @@ public class Receipt {
 	}
 
 	public List<ReceiptItem> getItems() {
-		return new ArrayList<ReceiptItem>(this.items);
+		return new ArrayList<>(this.items);
 	}
 
 	public void addDiscount(Discount discount) {

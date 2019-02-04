@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SupermarketTest {
 
@@ -23,7 +21,7 @@ class SupermarketTest {
 		cart.addItemQuantity(apples, 2.5);
 
 		Teller teller = new Teller(catalog);
-		teller.addSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 10.0);
+		teller.addSpecialOffer(new PercentOffer( toothbrush, 10.0));
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		Double current = receipt.getTotalPrice();
@@ -38,7 +36,7 @@ class SupermarketTest {
 	@Test
 	void TwoForAmount() {
 		SupermarketCatalog catalog = new FakeCatalog();
-		final int quantity = 2;
+		final int quantity = 5;
 		final double unitToothbrushPrice = 0.99;
 
 		Product toothbrush = new Product("toothbrush", ProductUnit.Each);
@@ -47,11 +45,11 @@ class SupermarketTest {
 		cart.addItemQuantity(toothbrush, quantity);
 
 		Teller teller = new Teller(catalog);
-		teller.addSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, unitToothbrushPrice);
+		teller.addSpecialOffer(new TwoForAmountOffer(toothbrush, unitToothbrushPrice));
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		Double current = receipt.getTotalPrice();
-		Double expected = unitToothbrushPrice;
+		Double expected = unitToothbrushPrice*3;
 
 		assertThat(current).isEqualTo(expected);
 	}
@@ -68,7 +66,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush, price);
-		teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0.99);
+		teller.addSpecialOffer(new ThreeForTwoOffer(toothbrush));
 		cart.addItemQuantity(toothbrush, quantity);
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
@@ -89,7 +87,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush, price);
-		teller.addSpecialOffer(SpecialOfferType.FiveForAmount, toothbrush, 0.99);
+		teller.addSpecialOffer(new FiveForAmountOffer(toothbrush, 0.99));
 		cart.addItemQuantity(toothbrush, quantity);
 		cart.addItemQuantity(toothbrush, 1);
 
@@ -100,7 +98,7 @@ class SupermarketTest {
 	}
 
 	@Test
-	void tenPercentDiscount(){
+	void percentDiscount(){
 		final double 	price = 5;
 		final double 	expected = price * 0.8;
 		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
@@ -110,7 +108,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush, price);
-		teller.addSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 20);
+		teller.addSpecialOffer(new PercentOffer(toothbrush, 20));
 		cart.addItem(toothbrush);
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
@@ -137,7 +135,7 @@ class SupermarketTest {
 
 		catalog.addProduct(toothbrush, toothbrush_price);
 		catalog.addProduct(apples, apples_price);
-		teller.addSpecialOffer(SpecialOfferType.FiveForAmount, toothbrush, 0.99);
+		teller.addSpecialOffer(new FiveForAmountOffer(toothbrush, 0.99));
 		cart.addItemQuantity(toothbrush, toothbrush_quantity);
 		cart.addItemQuantity(toothbrush, 1);
 
@@ -168,7 +166,7 @@ class SupermarketTest {
 
 		catalog.addProduct(toothbrush, price);
 		catalog.addProduct(apples, 2.99);
-		teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0.99);
+		teller.addSpecialOffer(new ThreeForTwoOffer(toothbrush));
 		cart.addItemQuantity(toothbrush, quantity);
 		cart.addItemQuantity(apples, 1);
 
@@ -205,9 +203,9 @@ class SupermarketTest {
 		catalog.addProduct(spoon, spoon_price);
 		catalog.addProduct(avocado, avocado_price);
 
-		teller.addSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, 1.5);
-		teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, spoon,spoon_price);
-		teller.addSpecialOffer(SpecialOfferType.FiveForAmount, avocado, 5.5);
+		teller.addSpecialOffer(new TwoForAmountOffer(toothbrush, 1.5));
+		teller.addSpecialOffer(new ThreeForTwoOffer(spoon));
+		teller.addSpecialOffer(new FiveForAmountOffer(avocado, 5.5));
 
 		cart.addItemQuantity(toothbrush, toothbrush_quantity);
 		cart.addItemQuantity(spoon, spoon_quantity);

@@ -1,28 +1,42 @@
 package fr.esiea.model;
 
+import java.util.Map;
+
 public class ThreeForTwoOffer implements Offer {
 
 	public final Product product;
-	public final double argument;
+	private Discount discount = null;
 
 
-	public ThreeForTwoOffer(Product product, double argument) {
-		this.argument = argument;
+	public ThreeForTwoOffer(Product product) {
 		this.product = product;
 	}
 
 	@Override
-	public Discount getDiscount(Product p, double quantity, double unitPrice) {
+	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
+		double quantity = productQuantities.get(product);
+		double unitPrice = catalog.getUnitPrice(product);
 		int quantityAsInt = (int) quantity;
-		Discount discount = null;
 
 		int numberOfXs = quantityAsInt / 3;
 
 		if (quantityAsInt > 2) {
 			double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + quantityAsInt % 3 * unitPrice);
-			discount = new Discount(p, "3 for 2", discountAmount);
+			discount = new Discount(product, "3 for 2", discountAmount);
 		}
 
+		productQuantities.put(product,(double)quantityAsInt%3);
+
+		return productQuantities;
+	}
+
+	@Override
+	public Product[] getProducts() {
+		return new Product[]{product};
+	}
+
+	@Override
+	public Discount getDiscount() {
 		return discount;
 	}
 }

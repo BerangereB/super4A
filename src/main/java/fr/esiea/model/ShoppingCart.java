@@ -1,19 +1,16 @@
 package fr.esiea.model;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShoppingCart {
 
-	private final List<ProductQuantity> items = new ArrayList<ProductQuantity>();
-	Map<Product, Double> productQuantities = new HashMap<Product,Double>();
+	private final List<ProductQuantity> items = new ArrayList<>();
+	Map<Product, Double> productQuantities = new HashMap<>();
 
 
 	List<ProductQuantity> getItems() {
-		return new ArrayList<ProductQuantity>(items);
+		return new ArrayList<>(items);
 	}
 
 	void addItem(Product product) {
@@ -34,18 +31,27 @@ public class ShoppingCart {
 		}
 	}
 
-	void handleOffers(Receipt receipt, Map<Product, Offer> offers, SupermarketCatalog catalog) {
-		for (Product p: productQuantities().keySet()) {
-			double quantity = productQuantities.get(p);
-			if (offers.containsKey(p)) {
-				Offer offer = offers.get(p);
-				double unitPrice = catalog.getUnitPrice(p);
+	void handleOffers(Receipt receipt, Map<Product[], Offer> offers, SupermarketCatalog catalog) {
+		Map<Product, Double> items = productQuantities();
 
-				Discount discount = offer.getDiscount(p, quantity,unitPrice);
-
-				if (discount != null)
-					receipt.addDiscount(discount);
+		//pour chaque offre
+		loop:
+		for (Map.Entry<Product[], Offer> offer : offers.entrySet()) {
+			//si l'offre est applicable à items i.e. les Produits sont présents
+			for (Product p : offer.getKey()) {
+				if (!items.containsKey(p)) {
+					continue loop;
+				}
 			}
+			// alors on l'applique et on supprime le nombre d'éléments nécessaires
+			items = offer.getValue().calculateDiscount(items, catalog);
+
+			Discount discount = offer.getValue().getDiscount();
+			if (discount != null) {
+				receipt.addDiscount(discount);
+			}
+
+
 		}
 	}
 }

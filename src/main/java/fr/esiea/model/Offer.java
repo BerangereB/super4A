@@ -1,6 +1,12 @@
 package fr.esiea.model;
 
+import java.util.Map;
+
 public interface Offer {
 
-	Discount getDiscount(Product p, double quantity, double unitPrice);
+	Product[] getProducts();
+
+	Discount getDiscount();
+
+	Map<Product, Double> calculateDiscount(Map<Product, Double> items, SupermarketCatalog catalog);
 }
