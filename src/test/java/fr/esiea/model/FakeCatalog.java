@@ -16,6 +16,12 @@ public class FakeCatalog implements SupermarketCatalog {
 		this.prices.put(product.getName(), price);
 	}
 
+	@Override
+	public void removeProduct(String name) {
+		prices.remove(name);
+		products.remove(name);
+	}
+
 	//TODO: add try/catch when prices is null > Double to double conversion
 	public double getUnitPrice(Product p) {
 		return this.prices.get(p.getName());

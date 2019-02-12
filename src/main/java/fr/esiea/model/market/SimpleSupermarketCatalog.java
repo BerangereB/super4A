@@ -24,7 +24,13 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 			this.prices.put(product.getName(), price);
 		}
 
-		public double getUnitPrice(Product p) {
+	@Override
+	public void removeProduct(String name) {
+		products.remove(name);
+		prices.remove(name);
+	}
+
+	public double getUnitPrice(Product p) {
 			return this.prices.get(p.getName());
 		}
 
