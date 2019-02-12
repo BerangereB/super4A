@@ -1,7 +1,10 @@
-package fr.esiea.model;
+package fr.esiea.model.marketReceipt;
 
 
 import fr.esiea.model.Offers.Offer;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.ProductQuantity;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.HashMap;
 import java.util.List;

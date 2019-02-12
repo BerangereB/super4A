@@ -1,12 +1,16 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.Offers.simpleOffers;
 
-import fr.esiea.model.Discount;
+
 import fr.esiea.model.Offers.Offer;
-import fr.esiea.model.Product;
-import fr.esiea.model.SupermarketCatalog;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
 
+/**
+ * Cette offre s'applique sur un produit : 3 pour le prix de 2
+ */
 public class ThreeForTwoOffer implements Offer {
 
 	public final Product product;

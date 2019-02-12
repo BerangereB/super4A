@@ -1,4 +1,6 @@
-package fr.esiea.model;
+package fr.esiea.model.market;
+
+
 
 public class Discount {
 	private final String description;

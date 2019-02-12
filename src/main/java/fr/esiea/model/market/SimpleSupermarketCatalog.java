@@ -1,9 +1,9 @@
-package fr.esiea.model;
+package fr.esiea.model.market;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleSupermarketCatalog implements SupermarketCatalog{
+public class SimpleSupermarketCatalog implements SupermarketCatalog {
 
 		private Map<String, Product> products = new HashMap<String, Product>();
 		private Map<String, Double> prices = new HashMap<String, Double>();

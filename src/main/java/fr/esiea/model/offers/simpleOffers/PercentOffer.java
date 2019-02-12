@@ -1,12 +1,16 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.Offers.simpleOffers;
 
-import fr.esiea.model.Discount;
+
 import fr.esiea.model.Offers.Offer;
-import fr.esiea.model.Product;
-import fr.esiea.model.SupermarketCatalog;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
 
+/**
+ * Offre qui applique une réduction de argument%
+ */
 public class PercentOffer implements Offer {
 
 	public final Product product;
@@ -18,8 +22,6 @@ public class PercentOffer implements Offer {
 		this.argument = argument;
 		this.product = product;
 	}
-
-
 
 	@Override
 	public Product[] getProducts() {
@@ -37,6 +39,7 @@ public class PercentOffer implements Offer {
 		double unitPrice = catalog.getUnitPrice(product);
 		discount = new Discount(product, argument + "% off", quantity * unitPrice * argument / 100.0);
 
+		// On applique l'offre sur l'ensemble des produits concernés donc on remove le produit du caddie
 		productQuantities.remove(product);
 		return productQuantities;
 	}

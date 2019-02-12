@@ -1,5 +1,8 @@
-package fr.esiea.model;
+package fr.esiea.model.marketReceipt;
 
+
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +13,11 @@ public class Receipt {
 
 	public Double getTotalPrice() {
 		double total = 0.0;
+		// calcul du prix du caddie entier sans les offres
 		for (ReceiptItem item : this.items) {
 			total += item.getTotalPrice();
 		}
+		// prix du caddie avec les offres
 		for (Discount discount : this.discounts) {
 			total -= discount.getDiscountAmount();
 		}

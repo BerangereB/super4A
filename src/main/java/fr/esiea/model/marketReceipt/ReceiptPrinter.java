@@ -1,9 +1,7 @@
-package fr.esiea;
+package fr.esiea.model.marketReceipt;
 
-import fr.esiea.model.Discount;
-import fr.esiea.model.ProductUnit;
-import fr.esiea.model.Receipt;
-import fr.esiea.model.ReceiptItem;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.ProductUnit;
 
 import java.util.Locale;
 

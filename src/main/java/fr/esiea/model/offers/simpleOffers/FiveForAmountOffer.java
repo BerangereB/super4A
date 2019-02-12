@@ -1,11 +1,15 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.Offers.simpleOffers;
 
-import fr.esiea.model.Discount;
-import fr.esiea.model.Product;
-import fr.esiea.model.SupermarketCatalog;
+import fr.esiea.model.Offers.Offer;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
-
+/**
+ * Cette offre s'applique sur un produit
+ * 5 unités de ce produit au prix de 'argument'€
+ */
 public class FiveForAmountOffer implements Offer {
 	public final Product product;
 	public final double argument;
@@ -21,16 +25,18 @@ public class FiveForAmountOffer implements Offer {
 	@Override
 	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
 		double quantity = productQuantities.get(product);
-		double unitPrice = catalog.getUnitPrice(product);
 		int quantityAsInt = (int) quantity;
 
 		int numberOfXs = quantityAsInt / 5;
 
+		// Si il y a au moins 5 unités du produit on calcul la réduction
 		if (quantityAsInt >= 5) {
+			double unitPrice = catalog.getUnitPrice(product);
+
 			double discountTotal = unitPrice * quantity - (argument * numberOfXs + quantityAsInt % 5 * unitPrice);
 			discount = new Discount(product, 5 + " for " + argument, discountTotal);
 		}
-
+		// On modifie la quantité du produit dans le caddie
 		productQuantities.put(product,(double)quantityAsInt % 5);
 
 		return productQuantities;

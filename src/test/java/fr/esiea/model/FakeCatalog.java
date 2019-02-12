@@ -1,6 +1,9 @@
 package fr.esiea.model;
 
 
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.SupermarketCatalog;
+
 import java.util.HashMap;
 import java.util.Map;
 

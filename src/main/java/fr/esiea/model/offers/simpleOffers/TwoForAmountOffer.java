@@ -1,9 +1,10 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.Offers.simpleOffers;
 
-import fr.esiea.model.Discount;
+
 import fr.esiea.model.Offers.Offer;
-import fr.esiea.model.Product;
-import fr.esiea.model.SupermarketCatalog;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
 

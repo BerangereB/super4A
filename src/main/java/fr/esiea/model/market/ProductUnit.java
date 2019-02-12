@@ -1,4 +1,4 @@
-package fr.esiea.model;
+package fr.esiea.model.market;
 
 public enum ProductUnit {
 	Kilo, Each

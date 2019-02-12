@@ -1,8 +1,19 @@
 package fr.esiea.model;
 
 
-import fr.esiea.ReceiptPrinter;
-import fr.esiea.model.Offers.*;
+import fr.esiea.model.Offers.bundleOffers.AmountBundleOffer;
+import fr.esiea.model.Offers.bundleOffers.PercentBundleOffer;
+import fr.esiea.model.Offers.simpleOffers.FiveForAmountOffer;
+import fr.esiea.model.Offers.simpleOffers.PercentOffer;
+import fr.esiea.model.Offers.simpleOffers.ThreeForTwoOffer;
+import fr.esiea.model.Offers.simpleOffers.TwoForAmountOffer;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.ProductUnit;
+import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.marketReceipt.Receipt;
+import fr.esiea.model.marketReceipt.ReceiptPrinter;
+import fr.esiea.model.marketReceipt.ShoppingCart;
+import fr.esiea.model.marketReceipt.Teller;
 import org.junit.jupiter.api.Test;
 
 
@@ -297,7 +308,7 @@ class SupermarketTest {
 
 
 	@Test
-	void testPercentBundleOffer_2_toothbrush_and_1_toothpaste_for_50_percent_discount_WITH_3_for_2_toothbrush_offer_WITH_3_for_2_toothpaste_offer_(){
+	void testPercentBundleOffer_2_toothbrush_and_1_toothpaste_for_50_percent_discount_WITH_3_for_2_toothbrush_offer(){
 		final double 	toothbrush_price = 0.99;
 		final int 		toothbrush_quantity = 5;
 
@@ -305,8 +316,8 @@ class SupermarketTest {
 		final int 		toothpaste_quantity = 2;
 
 		final double percentage = 50;
-									// bundle offer								 + 3 for 2 toothbrush   + reste
-		final double 	expected = (2*toothbrush_price +  toothpaste_price)*0.5 + toothbrush_price*2 + toothpaste_price;
+									// 2 bundle offer						     + reste
+		final double 	expected = (2*toothbrush_price +  toothpaste_price) + toothbrush_price;
 
 		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
 		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);

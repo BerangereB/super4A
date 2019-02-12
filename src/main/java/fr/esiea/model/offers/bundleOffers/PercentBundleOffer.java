@@ -1,14 +1,21 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.Offers.bundleOffers;
 
-import fr.esiea.model.Discount;
-import fr.esiea.model.Product;
-import fr.esiea.model.ProductUnit;
-import fr.esiea.model.SupermarketCatalog;
+
+import fr.esiea.model.Offers.Offer;
+import fr.esiea.model.market.Discount;
+import fr.esiea.model.market.Product;
+import fr.esiea.model.market.ProductUnit;
+import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-public class PercentBundleOffer implements Offer {
+/**
+ * Cette offre s'applique sur un ensemble de produits
+ * Chaque lot subit une réduction de argument%
+ */
+public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 
 	public final Map<Product,Integer> products;
 	public final double argument;
@@ -33,6 +40,7 @@ public class PercentBundleOffer implements Offer {
 	@Override
 	public Map<Product, Double> calculateDiscount(Map<Product, Double> items, SupermarketCatalog catalog) {
 
+		// Vérification des quantités
 		boolean checkedQuantities = true;
 		for(Map.Entry<Product,Integer> product : products.entrySet()){
 			if(product.getValue() > items.get(product.getKey())){
@@ -41,20 +49,14 @@ public class PercentBundleOffer implements Offer {
 			}
 		}
 
-
 		if(checkedQuantities){
-			double discountTotal = 0;
-			for(Map.Entry<Product,Integer> productEntry : products.entrySet()){
-				Product product = productEntry.getKey();
-				int quantity_offer = productEntry.getValue();
 
-				double quantity = items.get(product);
-				double unitPrice = catalog.getUnitPrice(product);
+			// On compte le nombre de lots
+			int numberOfXs =getNumberOfPacks(products,items);
 
-				discountTotal += quantity_offer*unitPrice*(100-argument)/100 ;
+			BiFunction<Integer,Double, Double> offer_function = (X, Y) -> X * Y * numberOfXs * (100 - argument)/100;
 
-				items.put(product,quantity - quantity_offer);
-			}
+			double discountTotal = getTotalDiscount(products,items,catalog,numberOfXs,offer_function);
 
 			String name = products.keySet().stream().map(Product::getName).collect(Collectors.joining( " & " ));
 			Product p = new Product(name, ProductUnit.Each);
