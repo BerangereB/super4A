@@ -6,7 +6,7 @@ public class Product {
 	private final ProductUnit unit;
 
 	public Product(String name, ProductUnit unit) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.unit = unit;
 	}
 

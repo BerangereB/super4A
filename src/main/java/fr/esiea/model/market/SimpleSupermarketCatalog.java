@@ -31,11 +31,11 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 	}
 
 	public double getUnitPrice(Product p) {
-			return this.prices.get(p.getName());
-		}
+		return this.prices.get(p.getName());
+	}
 
 	@Override
-	public Map<String,Product> getProducts() {
+	public Map<String, Product> getProducts() {
 		return products;
 	}
 

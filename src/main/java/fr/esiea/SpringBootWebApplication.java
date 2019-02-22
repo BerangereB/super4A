@@ -19,45 +19,67 @@ import org.springframework.web.servlet.view.RedirectView;
 public class SpringBootWebApplication {
 
 	private static SupermarketCatalog catalog;
-	private static ObjectMapper objectMapper;
+	private static ObjectMapper mapper;
 
 	public static void main(String[] args) {
 
 		catalog = new SimpleSupermarketCatalog();
-		objectMapper = new ObjectMapper();
+		mapper = new ObjectMapper();
 
 		SpringApplication.run(SpringBootWebApplication.class, args);
 	}
 
-	@GetMapping("/supermarket/products")
+	@GetMapping(value = "/supermarket/products", produces = "application/json")
 	public static String getProducts() {
 
 		ObjectNode catalog_ = JsonNodeFactoryUtils.getCatalog(catalog);
 
-		return catalog_.toString();
+		String ret = null;
+		try {
+			ret = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(catalog_);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
-	@GetMapping("/supermarket/products/{name}")
+	@GetMapping(value = "/supermarket/products/{name}", produces = "application/json")
 	public static String readProduct(@PathVariable String name) {
+		Product p = catalog.getProducts().get(name);
+
+		ObjectNode productAndPrice = JsonNodeFactoryUtils.getProduct(p.getName(),p.getUnit(),catalog.getUnitPrice(p));
+
+		String ret = null;
+		try {
+			ret = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(productAndPrice);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GetMapping(value = "/supermarket/products/update", produces = "application/json")
+	public static RedirectView updateProductPrice(@RequestParam("name") String name, @RequestParam("price") Double price) {
 
 		Product p = catalog.getProducts().get(name);
-		double price = catalog.getPrices().get(name);
-
-		ObjectNode productAndPrice = JsonNodeFactoryUtils.getProduct(p.getName(),p.getUnit(),catalog.getUnitPrice(p));
-		return productAndPrice.toString();
-	}
-
-	@GetMapping("/supermarket/products/add")
-	public static RedirectView addProduct(@RequestParam("name") String name,@RequestParam("unit") String unit,@RequestParam("price") String price) {
-
-		Product p = new Product(name, ProductUnit.valueOf(unit));
-		catalog.addProduct(p,Double.valueOf(price));
-
-		ObjectNode productAndPrice = JsonNodeFactoryUtils.getProduct(p.getName(),p.getUnit(),catalog.getUnitPrice(p));
+		if(p != null) { // replace value if exists
+			catalog.addProduct(p, price);
+		}
 		return new RedirectView("/supermarket/products");
 	}
 
-	@RequestMapping("/supermarket/products/remove/{name}")
+
+	@GetMapping(value = "/supermarket/products/add", produces = "application/json")
+	public static RedirectView addProduct(@RequestParam("name") String name,@RequestParam("unit") String unit,@RequestParam("price") Double price) {
+
+		unit = unit.substring(0, 1).toUpperCase() + unit.substring(1);
+
+		Product p = new Product(name, ProductUnit.valueOf(unit));
+		catalog.addProduct(p,price);
+		return new RedirectView("/supermarket/products");
+	}
+
+	@RequestMapping(value = "/supermarket/products/remove/{name}", produces = "application/json")
 	public static RedirectView removeProduct(@PathVariable String name) {
 
 		catalog.removeProduct(name);
