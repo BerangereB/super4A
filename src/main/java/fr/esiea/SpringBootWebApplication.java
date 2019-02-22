@@ -62,7 +62,7 @@ public class SpringBootWebApplication {
 	public static RedirectView updateProductPrice(@RequestParam("name") String name, @RequestParam("price") Double price) {
 
 		Product p = catalog.getProducts().get(name);
-		if(p != null) { // replace value if exists
+		if(p != null) { // replace value if product name exists
 			catalog.addProduct(p, price);
 		}
 		return new RedirectView("/supermarket/products");

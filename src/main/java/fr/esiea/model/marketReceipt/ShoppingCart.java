@@ -36,14 +36,14 @@ public class ShoppingCart {
 		}
 	}
 
-	void handleOffers(Receipt receipt, Map<Product[], Offer> offers, SupermarketCatalog catalog) {
+	void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
 		Map<Product, Double> products = productQuantities();
 
 		//pour chaque offre
 		loop:
-		for (Map.Entry<Product[], Offer> offer : offers.entrySet()) {
+		for (Offer offer : offers) {
 			//Vérification de la présence des produits de l'offre dans la copie du caddie
-			for (Product p : offer.getKey()) {
+			for (Product p : offer.getProducts()) {
 				if (!products.containsKey(p)) {
 					continue loop;
 				}
@@ -51,11 +51,11 @@ public class ShoppingCart {
 
 			// Si les produits sont bien présents on applique l'offre et on supprime
 			// de la copie du caddie le nombre d'éléments nécessaires
-			products = offer.getValue().calculateDiscount(products, catalog);
+			products = offer.calculateDiscount(products, catalog);
 
 			// On ajoute le Discount au Receipt si les conditions de l'offre sur les
 			// quantités ont été vérifiées
-			Discount discount = offer.getValue().getDiscount();
+			Discount discount = offer.getDiscount();
 			if (discount != null) {
 				receipt.addDiscount(discount);
 			}

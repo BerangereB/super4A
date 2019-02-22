@@ -8,6 +8,7 @@ import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -28,10 +29,9 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	}
 
 	@Override
-	public Product[] getProducts() {
-		return products.keySet().toArray(new Product[products.size()]);
+	public Set<Product> getProducts() {
+		return products.keySet();
 	}
-
 	@Override
 	public Discount getDiscount() {
 		return discount;

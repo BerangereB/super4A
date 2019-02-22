@@ -6,7 +6,9 @@ import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Offre qui applique une réduction de argument%
@@ -24,10 +26,11 @@ public class PercentOffer implements Offer {
 	}
 
 	@Override
-	public Product[] getProducts() {
-		return new Product[]{product};
+	public Set<Product> getProducts() {
+		Set<Product> set = new HashSet<Product>();
+		set.add(product);
+		return set;
 	}
-
 	@Override
 	public Discount getDiscount() {
 		return discount;

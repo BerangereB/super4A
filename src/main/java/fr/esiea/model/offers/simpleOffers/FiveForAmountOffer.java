@@ -5,7 +5,8 @@ import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 
-import java.util.Map;
+import java.util.*;
+
 /**
  * Cette offre s'applique sur un produit
  * 5 unités de ce produit au prix de 'argument'€
@@ -43,10 +44,11 @@ public class FiveForAmountOffer implements Offer {
 	}
 
 	@Override
-	public Product[] getProducts() {
-		return new Product[]{product};
+	public Set<Product> getProducts() {
+		Set<Product> set = new HashSet<Product>();
+		set.add(product);
+		return set;
 	}
-
 	@Override
 	public Discount getDiscount() {
 		return discount;
