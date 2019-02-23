@@ -11,14 +11,40 @@
 - COURREAU Quentin (9QC)
 
 ## How to use our API
-####PRODUCTS 
+
+Our API complies with REST standards according to the Richardson model. It uses the following
+verbs :
+- GET
+- POST
+- PUT
+- PATCH
+- DELETE
+
+For each query, an HTTP status code is sent : 
+
+1	1xx: Informational
+It means the request has been received and the process is continuing.
+
+2	2xx: Success
+It means the action was successfully received, understood, and accepted.
+
+3	3xx: Redirection
+It means further action must be taken in order to complete the request.
+
+4	4xx: Client Error
+It means the request contains incorrect syntax or cannot be fulfilled.
+
+5	5xx: Server Error
+It means the server failed to fulfill an apparently valid request.
+
+#### PRODUCTS 
 - display products : ```/supermarket/products```
 - display a specific product with its name : ```/supermarket/products/{name}```
 - add product to catalog : ```/supermarket/products/add?name={name}&unit={unit}&price={price}```
 - update product price : ```/supermarket/products/update?name={name}&price={price}```
 - remove a produt from catalog : ```/supermarket/products/remove/{name}```
 
-####OFFERS
+#### OFFERS
 - display offers : ```/supermarket/offers```
 - display simple offers : ```/supermarket/offers/simple```
 - display bundle offers : ```/supermarket/offers/bundle```
@@ -31,7 +57,7 @@
 	offerType = _PercentBundle_ or _AmountBundle_
 - remove offer : ```/supermarket/offers/remove?id={id}```
 
-####CUSTOMERS
+#### CUSTOMERS
 - display customers' shopping cart: ```/supermarket/customers```
 - display specific customer's shopping cart by Id : ```/supermarket/customers/{id}```
 - add product in a customer's shopping cart : ```/supermarket/customers/{id}/add/{product}/{quantity}```
