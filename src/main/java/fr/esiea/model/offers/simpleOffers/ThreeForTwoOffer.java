@@ -5,7 +5,9 @@ import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.OfferType;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class ThreeForTwoOffer implements Offer {
 
 	public final Product product;
 	private Discount discount = null;
+	private final OfferType type = OfferType.ThreeForTwo;
 
 
 	public ThreeForTwoOffer(Product product) {
@@ -42,13 +45,26 @@ public class ThreeForTwoOffer implements Offer {
 	}
 
 	@Override
-	public Set<Product> getProducts() {
-		Set<Product> set = new HashSet<Product>();
-		set.add(product);
-		return set;
+	public Map<Product,Integer> getProducts()
+	{
+		Map<Product,Integer> product = new HashMap<Product,Integer>();
+		product.put(this.product,1);
+		return product;
 	}
+
+	@Override
+	public Double getArgument() {
+		return 0.0d;
+	}
+
 	@Override
 	public Discount getDiscount() {
 		return discount;
+	}
+
+
+	@Override
+	public OfferType getType() {
+		return type;
 	}
 }

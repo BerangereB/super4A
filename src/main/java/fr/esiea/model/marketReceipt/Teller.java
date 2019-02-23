@@ -39,4 +39,8 @@ public class Teller {
 		return receipt;
 	}
 
+	public List<Offer> getOffers() {
+		return offers;
+	}
+
 }

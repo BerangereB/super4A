@@ -43,7 +43,7 @@ public class ShoppingCart {
 		loop:
 		for (Offer offer : offers) {
 			//Vérification de la présence des produits de l'offre dans la copie du caddie
-			for (Product p : offer.getProducts()) {
+			for (Product p : offer.getProducts().keySet()) {
 				if (!products.containsKey(p)) {
 					continue loop;
 				}

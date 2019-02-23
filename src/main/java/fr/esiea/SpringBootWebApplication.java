@@ -8,8 +8,10 @@ import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SimpleSupermarketCatalog;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.marketReceipt.Teller;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.BundleOfferFactory;
+import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
 import fr.esiea.web.JsonNodeFactoryUtils;
 import org.springframework.boot.SpringApplication;
@@ -17,22 +19,43 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @SpringBootApplication
 @RestController
 public class SpringBootWebApplication {
 
 	private static SupermarketCatalog catalog;
-	private static Offer bundleOffersList;
+	private static Teller teller;
 	private static ObjectMapper mapper;
 
 	public static void main(String[] args) {
 
 		catalog = new SimpleSupermarketCatalog();
-		bundleOffersList = new BundleOfferFactory();
-		mapper = new ObjectMapper();
+		teller = new Teller(catalog);
+		initTeller();
+	    mapper = new ObjectMapper();
 
 		SpringApplication.run(SpringBootWebApplication.class, args);
+	}
+
+	private static void initTeller() {
+		Product toothbrush = catalog.getProducts().get("toothbrush");
+		Product toothpaste = catalog.getProducts().get("toothpaste");
+
+		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, toothbrush, 0.0));
+		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount, toothpaste, 2.5));
+
+		Map<Product,Integer> productsBundle = new HashMap<Product,Integer>();
+		productsBundle.put(toothbrush,3);
+		productsBundle.put(toothpaste,2);
+		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,
+			productsBundle,
+			20));
+
 	}
 
 	@GetMapping(value = "/supermarket/products", produces = "application/json")
@@ -95,12 +118,19 @@ public class SpringBootWebApplication {
 	}
 
 
-	@GetMapping(value="/supermarket/offers/bundle", produces = "application/json")
+	@GetMapping(value="/supermarket/offers", produces = "application/json")
 	public static String getDiscount(){
 
-		String list = null;
+		List<Offer> offers = teller.getOffers();
+		ObjectNode offersNode = JsonNodeFactoryUtils.getOffers(offers);
 
-		return list;
+		String ret = null;
+		try {
+			ret = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(offersNode);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return ret;
 
 	}
 

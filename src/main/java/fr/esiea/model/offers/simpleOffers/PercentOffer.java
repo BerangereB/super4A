@@ -5,7 +5,9 @@ import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.OfferType;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +20,7 @@ public class PercentOffer implements Offer {
 	public final Product product;
 	public final double argument;
 	private Discount discount = null;
+	private final OfferType type = OfferType.Percent;
 
 
 	public PercentOffer(Product product, double argument) {
@@ -26,11 +29,18 @@ public class PercentOffer implements Offer {
 	}
 
 	@Override
-	public Set<Product> getProducts() {
-		Set<Product> set = new HashSet<Product>();
-		set.add(product);
-		return set;
+	public Map<Product,Integer> getProducts()
+	{
+		Map<Product,Integer> product = new HashMap<Product,Integer>();
+		product.put(this.product,1);
+		return product;
 	}
+
+	@Override
+	public Double getArgument() {
+		return argument;
+	}
+
 	@Override
 	public Discount getDiscount() {
 		return discount;
@@ -45,6 +55,12 @@ public class PercentOffer implements Offer {
 		// On applique l'offre sur l'ensemble des produits concernés donc on remove le produit du caddie
 		productQuantities.remove(product);
 		return productQuantities;
+	}
+
+
+	@Override
+	public OfferType getType() {
+		return type;
 	}
 
 }

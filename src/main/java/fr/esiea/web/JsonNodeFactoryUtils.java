@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.Offer;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class JsonNodeFactoryUtils {
 
@@ -38,5 +41,30 @@ public class JsonNodeFactoryUtils {
 		}
 
 		return catalog_;
+	}
+
+	public static ObjectNode getOffers(List<Offer> offers) {
+		ObjectNode offersNode = jnf.objectNode();
+		offersNode.put("Size",offers.size());
+		ArrayNode offersArrayNode = offersNode.putArray("Offers");
+
+		for(Offer offer : offers){
+			Map<Product,Integer> products = offer.getProducts();
+
+			ObjectNode offerObjectNode = jnf.objectNode();
+			offerObjectNode.put("Type",offer.getType().toString());
+
+			ArrayNode productsArrayNode = offerObjectNode.putArray("Products");
+			for(Map.Entry<Product,Integer> p : products.entrySet()){
+				productsArrayNode.add(p.getValue() + " " + p.getKey().getName());
+			}
+			if(offer.getArgument() != 0.0d){
+				offerObjectNode.put("Argument",offer.getArgument());
+			}
+
+			offersArrayNode.add(offerObjectNode);
+		}
+
+		return offersNode;
 	}
 }

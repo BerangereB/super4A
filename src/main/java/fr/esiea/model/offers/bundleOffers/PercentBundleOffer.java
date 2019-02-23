@@ -6,6 +6,7 @@ import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.OfferType;
 
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	public final Map<Product,Integer> products;
 	public final double argument;
 	private Discount discount = null;
+	private final OfferType type = OfferType.PercentBundle;
 
 
 	public PercentBundleOffer(Map<Product,Integer> products, double argument) {
@@ -29,9 +31,16 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	}
 
 	@Override
-	public Set<Product> getProducts() {
-		return products.keySet();
+	public Double getArgument() {
+		return argument;
 	}
+
+	@Override
+	public Map<Product,Integer> getProducts() {
+		return products;
+	}
+
+
 	@Override
 	public Discount getDiscount() {
 		return discount;
@@ -64,6 +73,11 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 		}
 
 		return items;
+	}
+
+	@Override
+	public OfferType getType() {
+		return type;
 	}
 }
 

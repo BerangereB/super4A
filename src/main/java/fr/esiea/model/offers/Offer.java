@@ -5,11 +5,14 @@ import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 
 import java.util.Map;
-import java.util.Set;
 
 public interface Offer {
 
-	Set<Product> getProducts();
+	OfferType getType();
+
+	Double getArgument();
+
+	Map<Product,Integer> getProducts();
 
 	Discount getDiscount();
 
