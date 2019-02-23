@@ -1,6 +1,6 @@
-package fr.esiea.model.Offers.simpleOffers;
+package fr.esiea.model.offers.simpleOffers;
 
-import fr.esiea.model.Offers.Offer;
+import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;

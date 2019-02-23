@@ -8,22 +8,28 @@ import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SimpleSupermarketCatalog;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.Offer;
+import fr.esiea.model.offers.BundleOfferFactory;
+import fr.esiea.model.offers.SimpleOfferFactory;
 import fr.esiea.web.JsonNodeFactoryUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+
 @SpringBootApplication
 @RestController
 public class SpringBootWebApplication {
 
 	private static SupermarketCatalog catalog;
+	private static Offer bundleOffersList;
 	private static ObjectMapper mapper;
 
 	public static void main(String[] args) {
 
 		catalog = new SimpleSupermarketCatalog();
+		bundleOffersList = new BundleOfferFactory();
 		mapper = new ObjectMapper();
 
 		SpringApplication.run(SpringBootWebApplication.class, args);
@@ -68,7 +74,6 @@ public class SpringBootWebApplication {
 		return new RedirectView("/supermarket/products");
 	}
 
-
 	@GetMapping(value = "/supermarket/products/add", produces = "application/json")
 	public static RedirectView addProduct(@RequestParam("name") String name,@RequestParam("unit") String unit,@RequestParam("price") Double price) {
 
@@ -88,4 +93,15 @@ public class SpringBootWebApplication {
 
 		return new RedirectView("/supermarket/products");
 	}
+
+
+	@GetMapping(value="/supermarket/offers/bundle", produces = "application/json")
+	public static String getDiscount(){
+
+		String list = null;
+
+		return list;
+
+	}
+
 }

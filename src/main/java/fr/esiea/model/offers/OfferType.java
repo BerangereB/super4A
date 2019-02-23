@@ -1,4 +1,4 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.offers;
 
 public enum OfferType {
 	FiveForAmount,

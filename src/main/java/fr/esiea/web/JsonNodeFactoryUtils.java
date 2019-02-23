@@ -15,7 +15,6 @@ public class JsonNodeFactoryUtils {
 
 
 	public static ObjectNode getProduct(String name, ProductUnit unit, double price) {
-
 		ObjectNode productAndPrice = jnf.objectNode();
 		productAndPrice.put("name",name);
 		productAndPrice.put("unit",unit.toString());

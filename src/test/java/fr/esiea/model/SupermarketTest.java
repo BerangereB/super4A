@@ -1,15 +1,14 @@
 package fr.esiea.model;
 
-
-import fr.esiea.model.Offers.BundleOfferFactory;
-import fr.esiea.model.Offers.OfferType;
-import fr.esiea.model.Offers.SimpleOfferFactory;
-import fr.esiea.model.Offers.bundleOffers.AmountBundleOffer;
-import fr.esiea.model.Offers.bundleOffers.PercentBundleOffer;
-import fr.esiea.model.Offers.simpleOffers.FiveForAmountOffer;
-import fr.esiea.model.Offers.simpleOffers.PercentOffer;
-import fr.esiea.model.Offers.simpleOffers.ThreeForTwoOffer;
-import fr.esiea.model.Offers.simpleOffers.TwoForAmountOffer;
+import fr.esiea.model.offers.BundleOfferFactory;
+import fr.esiea.model.offers.OfferType;
+import fr.esiea.model.offers.SimpleOfferFactory;
+import fr.esiea.model.offers.bundleOffers.AmountBundleOffer;
+import fr.esiea.model.offers.bundleOffers.PercentBundleOffer;
+import fr.esiea.model.offers.simpleOffers.FiveForAmountOffer;
+import fr.esiea.model.offers.simpleOffers.PercentOffer;
+import fr.esiea.model.offers.simpleOffers.ThreeForTwoOffer;
+import fr.esiea.model.offers.simpleOffers.TwoForAmountOffer;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;

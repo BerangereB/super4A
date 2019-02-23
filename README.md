@@ -26,7 +26,7 @@
 - add simple offer : ```/supermarket/offers/simple/add?type={offerType}&product={product}&arg={arg}``` arg is optional for _ThreeForTwo_ TYPE
 
 	offerType = _Percent_, _ThreeForTwo_, _TwoForAmount_ or _FiveForAmount_
-- add bundle offer : ```/supermarket/offers/simple/add?type={offerType}&product={product1}&product={product2}&product={product3}&quantity={quantity1}&quantity={quantity2}&quantity={quantity3}&arg={arg}```
+- add bundle offer : ```/supermarket/offers/bundle/add?type={offerType}&product={product1}&product={product2}&product={product3}&quantity={quantity1}&quantity={quantity2}&quantity={quantity3}&arg={arg}```
 
 	offerType = _PercentBundle_ or _AmountBundle_
 - remove offer : ```/supermarket/offers/remove?id={id}```

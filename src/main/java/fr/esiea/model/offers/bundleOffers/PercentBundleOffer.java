@@ -1,7 +1,7 @@
-package fr.esiea.model.Offers.bundleOffers;
+package fr.esiea.model.offers.bundleOffers;
 
 
-import fr.esiea.model.Offers.Offer;
+import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;

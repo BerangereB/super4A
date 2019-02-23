@@ -1,4 +1,4 @@
-package fr.esiea.model.Offers;
+package fr.esiea.model.offers;
 
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;

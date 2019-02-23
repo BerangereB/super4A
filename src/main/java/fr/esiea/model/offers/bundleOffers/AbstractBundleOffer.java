@@ -1,4 +1,4 @@
-package fr.esiea.model.Offers.bundleOffers;
+package fr.esiea.model.offers.bundleOffers;
 
 
 import fr.esiea.model.market.Product;

@@ -19,6 +19,7 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 			addProduct(bananas, 2.99);
 
 		}
+
 		public void addProduct(Product product, double price) {
 			this.products.put(product.getName(), product);
 			this.prices.put(product.getName(), price);
