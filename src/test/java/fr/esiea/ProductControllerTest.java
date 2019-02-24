@@ -1,68 +1,52 @@
 package fr.esiea;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import fr.esiea.web.ProductController;
+import fr.esiea.web.exceptions.ProductNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import java.io.IOException;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = DEFINED_PORT) //8080 by default
+@SpringBootTest
 public class ProductControllerTest {
 
-	private final String URL = "http://localhost:8080/supermarket/products";
-
+	@Autowired
+	private ProductController controller;
 
 	@Test
-	public void testDisplayProducts() throws IOException {
-		HttpUriRequest request = new HttpGet(URL);
-		HttpResponse response = HttpClientBuilder.create().build().execute(request);
+	public void testDisplayProducts(){
 
-		String responseContent = EntityUtils.toString(response.getEntity());
+		List<Product> expected = Arrays.asList(
+			new Product("toothbrush", ProductUnit.Each,0.99),
+		    new Product("toothpaste", ProductUnit.Each,0.89),
+		    new Product("apples", ProductUnit.Kilo,1.99),
+		    new Product("bananas", ProductUnit.Kilo,2.99));
 
-		List<Product> result = new ObjectMapper().readValue(responseContent, new TypeReference<List<Product>>(){});
+		List<Product> result = controller.getProducts();
 
-		assertThat(result).isEqualTo(new ArrayList<Product>(SupermarketService.getCatalog().getProducts().values()));
+		assertTrue(expected.size() == result.size() && expected.containsAll(result));
 	}
 
 
 
 	@Test
-	public void testDisplayProduct() throws IOException {
-
-		HttpUriRequest request = new HttpGet(URL + "/toothpaste");
-		HttpResponse response = HttpClientBuilder.create().build().execute(request);
-
-		String responseContent = EntityUtils.toString(response.getEntity());
-
-		Product result = new ObjectMapper().readValue(responseContent, Product.class);
-
+	public void testDisplayProduct(){
 		Product p = new Product("toothpaste", ProductUnit.Each,0.89);
-		assertThat(p).isEqualTo(result);
+		assertThat(p).isEqualTo(controller.getProduct("toothpaste"));
 	}
 
-	@Test
-	public void testDisplayProduct_doesnot_exist_return_error_404() throws IOException {
-
-		HttpUriRequest request = new HttpGet(URL + "/bjk");
-		HttpResponse response = HttpClientBuilder.create().build().execute(request);
-
-
-		int status = response.getStatusLine().getStatusCode();
-		assertThat(404).isEqualTo(status);
+	@Test(expected = ProductNotFoundException.class)
+	public void testDisplayProduct_doesnot_exist_return_error_404(){
+		controller.getProduct("toothpa");
 	}
 }
