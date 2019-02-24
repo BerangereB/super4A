@@ -10,6 +10,7 @@ import java.util.*;
 
 public class ShoppingCart {
 
+	//TODO : to optimise/readapt -> duplicates
 	private final ArrayList<ProductQuantity> items = new ArrayList<ProductQuantity>();
 	private Map<String, Double> productQuantities = new HashMap<String,Double>();
 
