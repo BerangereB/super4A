@@ -1,6 +1,7 @@
 package fr.esiea.model.offers.simpleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
@@ -13,9 +14,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class TwoForAmountOffer implements Offer {
+	@JsonProperty("Product")
 	public final Product product;
+	@JsonProperty("Argument")
 	public final double argument;
 	private Discount discount;
+	@JsonProperty("Type")
 	private final OfferType type = OfferType.TwoForAmount;
 
 
@@ -35,7 +39,7 @@ public class TwoForAmountOffer implements Offer {
 		if (quantityAsInt >= 2) {
 			double total = argument * numberOfXs + quantityAsInt % 2 * unitPrice;
 			double discountN = unitPrice * quantity - total;
-			discount = new Discount(product, "2 for " + argument, discountN);
+			discount = new Discount(product.getName(), "2 for " + argument, discountN);
 		}
 
 		productQuantities.put(product,(double)quantityAsInt % 2);

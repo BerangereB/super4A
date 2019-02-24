@@ -34,7 +34,7 @@ public class ReceiptPrinter {
 			result.append(line);
 		}
 		for (Discount discount : receipt.getDiscounts()) {
-			String productPresentation = discount.getProduct().getName();
+			String productPresentation = discount.getProductName();
 			String pricePresentation = String.format(Locale.UK, "%.2f", discount.getDiscountAmount());
 			String description = discount.getDescription();
 			result.append(description);

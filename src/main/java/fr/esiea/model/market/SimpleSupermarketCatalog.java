@@ -1,38 +1,37 @@
 package fr.esiea.model.market;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class SimpleSupermarketCatalog implements SupermarketCatalog {
 
-		private Map<String, Product> products = new HashMap<String, Product>();
-		private Map<String, Double> prices = new HashMap<String, Double>();
+	private Map<String, Product> products = new HashMap<String, Product>();
 
-		public SimpleSupermarketCatalog(){
-			Product toothbrush = new Product("Toothbrush", ProductUnit.Each);
-			addProduct(toothbrush, 0.99);
-			Product toothpaste = new Product("Toothpaste", ProductUnit.Each);
-			addProduct(toothpaste, 0.89);
-			Product apples = new Product("Apples", ProductUnit.Kilo);
-			addProduct(apples, 1.99);
-			Product bananas = new Product("Bananas", ProductUnit.Kilo);
-			addProduct(bananas, 2.99);
+	public SimpleSupermarketCatalog() {
+		Product toothbrush = new Product("Toothbrush", ProductUnit.Each,0.99);
+		addProduct(toothbrush);
+		Product toothpaste = new Product("Toothpaste", ProductUnit.Each,0.89);
+		addProduct(toothpaste);
+		Product apples = new Product("Apples", ProductUnit.Kilo,1.99);
+		addProduct(apples);
+		Product bananas = new Product("Bananas", ProductUnit.Kilo,2.99);
+		addProduct(bananas);
 
-		}
+	}
 
-		public void addProduct(Product product, double price) {
-			this.products.put(product.getName(), product);
-			this.prices.put(product.getName(), price);
-		}
+	public void addProduct(Product product) {
+		this.products.put(product.getName(), product);
+	}
 
 	@Override
 	public void removeProduct(String name) {
 		products.remove(name);
-		prices.remove(name);
 	}
 
 	public double getUnitPrice(Product p) {
-		return this.prices.get(p.getName());
+		return this.products.get(p.getName()).getPrice();
 	}
 
 	@Override
@@ -40,10 +39,6 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 		return products;
 	}
 
-	@Override
-	public Map<String, Double> getPrices() {
-		return prices;
-	}
 
 }
 

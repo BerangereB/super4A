@@ -5,10 +5,10 @@ package fr.esiea.model.market;
 public class Discount {
 	private final String description;
 	private final double discountAmount;
-	private final Product product;
+	private final String productName;
 
-	public Discount(Product product, String description, double discountAmount) {
-		this.product = product;
+	public Discount(String productName, String description, double discountAmount) {
+		this.productName = productName;
 		this.description = description;
 		this.discountAmount = discountAmount;
 	}
@@ -22,8 +22,8 @@ public class Discount {
 		return discountAmount;
 	}
 
-	public Product getProduct() {
-		return product;
+	public String getProductName() {
+		return productName;
 	}
 
 }

@@ -23,10 +23,10 @@ class SupermarketTest {
 	@Test
 	void testSomething() {
 		SupermarketCatalog catalog = new FakeCatalog();
-		Product toothbrush = new Product("toothbrush", ProductUnit.Each);
-		catalog.addProduct(toothbrush, 0.99);
-		Product apples = new Product("apples", ProductUnit.Kilo);
-		catalog.addProduct(apples, 1.99);
+		Product toothbrush = new Product("toothbrush", ProductUnit.Each, 0.99);
+		catalog.addProduct(toothbrush);
+		Product apples = new Product("apples", ProductUnit.Kilo, 1.99);
+		catalog.addProduct(apples);
 
 		ShoppingCart cart = new ShoppingCart();
 		cart.addItemQuantity(apples, 2.5);
@@ -50,8 +50,8 @@ class SupermarketTest {
 		final int quantity = 5;
 		final double unitToothbrushPrice = 0.99;
 
-		Product toothbrush = new Product("toothbrush", ProductUnit.Each);
-		catalog.addProduct(toothbrush, unitToothbrushPrice);
+		Product toothbrush = new Product("toothbrush", ProductUnit.Each, unitToothbrushPrice);
+		catalog.addProduct(toothbrush);
 		ShoppingCart cart = new ShoppingCart();
 		cart.addItemQuantity(toothbrush, quantity);
 
@@ -70,13 +70,13 @@ class SupermarketTest {
 		final double 	price = 0.99;
 		final int 		quantity = 3;
 		final double 	expected = 2 * price;
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, price);
+		catalog.addProduct(toothbrush);
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush,0.0));
 		cart.addItemQuantity(toothbrush, quantity);
 
@@ -91,13 +91,13 @@ class SupermarketTest {
 		final double 	price = 0.99;
 		final int 		quantity = 4;
 		final double 	expected = price;
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, price);
+		catalog.addProduct(toothbrush);
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount,toothbrush, 0.99));
 		cart.addItemQuantity(toothbrush, quantity);
 		cart.addItemQuantity(toothbrush, 1);
@@ -112,13 +112,13 @@ class SupermarketTest {
 	void percentDiscount(){
 		final double 	price = 5;
 		final double 	expected = price * 0.8;
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, price);
+		catalog.addProduct(toothbrush);
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.Percent,toothbrush, 20));
 		cart.addItem(toothbrush);
 
@@ -137,15 +137,15 @@ class SupermarketTest {
 
 		final double 	expected = toothbrush_price + apples_price * apples_quantity;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	apples = new Product("apples", ProductUnit.Kilo);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	apples = new Product("apples", ProductUnit.Kilo, apples_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(apples, apples_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(apples);
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount,toothbrush, 0.99));
 		cart.addItemQuantity(toothbrush, toothbrush_quantity);
 		cart.addItemQuantity(toothbrush, 1);
@@ -168,15 +168,15 @@ class SupermarketTest {
 		final double 	price = 0.99;
 		final int 		quantity = 3;
 		final double 	expected = 2 * price + 2.99;
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	apples = new Product("apples", ProductUnit.Kilo);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, price);
+		final Product 	apples = new Product("apples", ProductUnit.Kilo, 2.99);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, price);
-		catalog.addProduct(apples, 2.99);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(apples);
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush,0.0));
 		cart.addItemQuantity(toothbrush, quantity);
 		cart.addItemQuantity(apples, 1);
@@ -202,17 +202,17 @@ class SupermarketTest {
 
 		final double 	expected = toothbrush_price * toothbrush_quantity + spoon_price * spoon_quantity + avocado_price * avocado_quantity;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	spoon = new Product("spoon", ProductUnit.Each);
-		final Product 	avocado = new Product("avocado", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	spoon = new Product("spoon", ProductUnit.Each, spoon_price);
+		final Product 	avocado = new Product("avocado", ProductUnit.Each, avocado_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(spoon, spoon_price);
-		catalog.addProduct(avocado, avocado_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(spoon);
+		catalog.addProduct(avocado);
 
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.TwoForAmount,toothbrush, 1.5));
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,spoon,0.0));
@@ -242,15 +242,15 @@ class SupermarketTest {
 
 		final double 	expected = toothbrush_price  + toothpaste_price + amount;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each, toothpaste_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(toothpaste, toothpaste_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(toothpaste);
 
 		Map<Product,Integer> products = new HashMap<Product,Integer>();
 		products.put(toothbrush,2);products.put(toothpaste,1);
@@ -279,15 +279,15 @@ class SupermarketTest {
 
 		final double 	expected = toothbrush_price + toothpaste_price + ((toothbrush_quantity-1)*toothbrush_price +  (toothpaste_quantity-1)*toothpaste_price)*0.5;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each, toothpaste_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(toothpaste, toothpaste_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(toothpaste);
 
 		Map<Product,Integer> products = new HashMap<Product,Integer>();
 		products.put(toothbrush,2);products.put(toothpaste,1);
@@ -315,15 +315,15 @@ class SupermarketTest {
 									// 2 bundle offer						     + reste
 		final double 	expected = (2*toothbrush_price +  toothpaste_price) + toothbrush_price;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each, toothpaste_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(toothpaste, toothpaste_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(toothpaste);
 
 		Map<Product,Integer> products = new HashMap<Product,Integer>();
 		products.put(toothbrush,2);products.put(toothpaste,1);
@@ -357,15 +357,15 @@ class SupermarketTest {
 
 		final double 	expected = toothbrush_price*toothbrush_quantity + toothpaste_price*toothpaste_quantity;
 
-		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each);
-		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each);
+		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, toothbrush_price);
+		final Product 	toothpaste = new Product("toothpaste", ProductUnit.Each, toothpaste_price);
 
 		SupermarketCatalog catalog = new FakeCatalog();
 		Teller teller = new Teller(catalog);
 		ShoppingCart cart = new ShoppingCart();
 
-		catalog.addProduct(toothbrush, toothbrush_price);
-		catalog.addProduct(toothpaste, toothpaste_price);
+		catalog.addProduct(toothbrush);
+		catalog.addProduct(toothpaste);
 
 		Map<Product,Integer> products = new HashMap<Product,Integer>();
 		products.put(toothbrush,2);products.put(toothpaste,1);

@@ -1,6 +1,7 @@
 package fr.esiea.model.offers.simpleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
@@ -17,9 +18,12 @@ import java.util.Set;
  */
 public class PercentOffer implements Offer {
 
+	@JsonProperty("Product")
 	public final Product product;
+	@JsonProperty("Argument")
 	public final double argument;
 	private Discount discount = null;
+	@JsonProperty("Type")
 	private final OfferType type = OfferType.Percent;
 
 
@@ -50,7 +54,7 @@ public class PercentOffer implements Offer {
 	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
 		double quantity = productQuantities.get(product);
 		double unitPrice = catalog.getUnitPrice(product);
-		discount = new Discount(product, argument + "% off", quantity * unitPrice * argument / 100.0);
+		discount = new Discount(product.getName(), argument + "% off", quantity * unitPrice * argument / 100.0);
 
 		// On applique l'offre sur l'ensemble des produits concernés donc on remove le produit du caddie
 		productQuantities.remove(product);

@@ -40,22 +40,13 @@ It means the server failed to fulfill an apparently valid request.
 #### PRODUCTS 
 - display products : ``` GET /supermarket/products```
 - display a specific product with its name : ``` GET /supermarket/products/{name}```
-- add product to catalog : ```POST /supermarket/products/add?name={name}&unit={unit}&price={price}```
-- update product price : ```PATCH /supermarket/products/update?name={name}&price={price}```
-- remove a product from catalog : ```DELETE /supermarket/products/remove/{name}```
 
 #### OFFERS
 - display offers : ```GET /supermarket/offers```
 - display simple offers : ```GET /supermarket/offers/simple```
 - display bundle offers : ```GET /supermarket/offers/bundle```
 - find offers by specific product : ```GET /supermarket/offers/find?product={product}```
-- add simple offer : ```POST /supermarket/offers/simple/add?type={offerType}&product={product}&arg={arg}``` arg is optional for _ThreeForTwo_ TYPE
 
-	offerType = _Percent_, _ThreeForTwo_, _TwoForAmount_ or _FiveForAmount_
-- add bundle offer : ```POST /supermarket/offers/bundle/add?type={offerType}&product={product1}&product={product2}&product={product3}&quantity={quantity1}&quantity={quantity2}&quantity={quantity3}&arg={arg}```
-
-	offerType = _PercentBundle_ or _AmountBundle_
-- remove offer : ```/supermarket/offers/remove?id={id}```
 
 #### CUSTOMERS
 - display customers' shopping cart: ```GET /supermarket/customers```

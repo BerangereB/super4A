@@ -1,15 +1,15 @@
 package fr.esiea.model.offers.bundleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.Product;
-import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -19,9 +19,12 @@ import java.util.stream.Collectors;
  */
 public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 
+	@JsonProperty("Products")
 	public final Map<Product,Integer> products;
+	@JsonProperty("Argument")
 	public final double argument;
 	private Discount discount = null;
+	@JsonProperty("Type")
 	private final OfferType type = OfferType.PercentBundle;
 
 
@@ -68,8 +71,7 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 			double discountTotal = getTotalDiscount(products,items,catalog,numberOfXs,offer_function);
 
 			String name = products.keySet().stream().map(Product::getName).collect(Collectors.joining( " & " ));
-			Product p = new Product(name, ProductUnit.Each);
-			discount = new Discount(p,  "BundleOffer for " + argument, discountTotal);
+			discount = new Discount(name,  "BundleOffer for " + argument, discountTotal);
 		}
 
 		return items;
