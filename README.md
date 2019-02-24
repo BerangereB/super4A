@@ -41,8 +41,8 @@ It means the server failed to fulfill an apparently valid request.
 
 - display products : ``` GET /supermarket/products```
 - display a specific product with its name : ``` GET /supermarket/products/{name}```
-- add product to the catalog : ``` POST /supermarket/products```
-- remove a product by its name : ``` DELETE /supermarket/products/{name}```
+- add product to the catalog : ``` POST /supermarket/products/add```
+- remove a product by its name : ``` DELETE /supermarket/products/remove/{name}```
 
 #### OFFERS
 

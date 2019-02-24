@@ -1,6 +1,5 @@
 package fr.esiea.web;
 
-import com.sun.deploy.net.HttpResponse;
 import fr.esiea.model.market.Product;
 import fr.esiea.web.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -27,25 +26,19 @@ public class ProductController {
 		}
 	}
 
-	@PostMapping(value = "/supermarket/products", produces = "application/json")
-	public ResponseEntity addProduct(@RequestBody Product newProduct){
-		SupermarketService.getCatalog().addProduct(newProduct);
-		Product p = SupermarketService.getProduct(newProduct.getName());
-		if(p!=null){
-			return new ResponseEntity(HttpStatus.OK);
-		}else{
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	@PostMapping(value = "/supermarket/products/add", produces = "application/json")
+	public Product addProduct(@RequestBody Product newProduct){
+		return SupermarketService.addProduct(newProduct);
+
 	}
 
-	@DeleteMapping(value = "/supermarket/products/{name}", produces = "application/json")
-	public ResponseEntity removeProduct(@PathVariable String name){
-		SupermarketService.getCatalog().getProducts().remove(name);
-		Product p = SupermarketService.getProduct(name);
-		if(p==null){
-			return new ResponseEntity(HttpStatus.OK);
+	@DeleteMapping(value = "/supermarket/products/remove/{name}", produces = "application/json")
+	public Product removeProduct(@PathVariable String name){
+		Product p = SupermarketService.removeProduct(name);
+		if(p!=null){
+			return p;
 		}else{
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ProductNotFoundException();
 		}
 	}
 

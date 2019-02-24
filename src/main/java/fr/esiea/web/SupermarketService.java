@@ -118,4 +118,23 @@ public class SupermarketService {
 			productsBundle,
 			20));
 	}
+
+	public static Product removeProduct(String name) {
+		Product p = SupermarketService.getProduct(name);
+		if(p!=null){
+			catalog.deleteProduct(name);
+		}
+		return p;
+	}
+
+	public static Product addProduct(Product p) {
+		boolean exists = SupermarketService.getProduct(p.getName()) != null;
+		if(!exists){
+			catalog.addProduct(p);
+			return p;
+		}else{
+			return null;
+		}
+
+	}
 }
