@@ -1,5 +1,6 @@
 package fr.esiea.model.marketReceipt;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.ProductQuantity;
@@ -44,7 +45,7 @@ public class ShoppingCart {
 		items.remove(new ProductQuantity(product, quantity));
 		productQuantities.remove(product);
 	}
-
+	//	TODO: unacceptable
 	void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
 		Map<String, Double> products = productQuantities();
 

@@ -17,15 +17,6 @@ import java.util.UUID;
 public class CustomerController {
 	@GetMapping(value = "/supermarket/customers/{id}", produces = "text/plain")
 	public ResponseEntity getReceipt(@PathVariable final int id) {
-		final ReceiptPrinter receiptPrinter = new ReceiptPrinter();
-		final String receipt = receiptPrinter.printReceipt(new Receipt());
-
-		SupermarketService.getCatalog().getProducts().remove(name);
-		Product p = SupermarketService.getProduct(name);
-		if(p==null){
-			return new ResponseEntity(HttpStatus.OK, receipt);
-		}else{
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }
