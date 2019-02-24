@@ -21,6 +21,10 @@ public class ShoppingCart {
 		this.addItemQuantity(product, 1.0);
 	}
 
+	public void removeItem(String product) {
+		this.removeItemQuantity(product, 1.0);
+	}
+
 	public Map<String, Double> productQuantities() {
 		return productQuantities;
 	}
@@ -33,6 +37,12 @@ public class ShoppingCart {
 		} else {
 			productQuantities.put(product, quantity);
 		}
+	}
+
+	//can be private
+	public void removeItemQuantity(String product, double quantity) {
+		items.remove(new ProductQuantity(product, quantity));
+		productQuantities.remove(product);
 	}
 
 	void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
