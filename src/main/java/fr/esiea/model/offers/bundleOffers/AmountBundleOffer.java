@@ -1,22 +1,15 @@
 package fr.esiea.model.offers.bundleOffers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
-import fr.esiea.model.market.ProductUnit;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 
 /**
@@ -25,35 +18,29 @@ import java.util.stream.Collectors;
  */
 public class AmountBundleOffer extends AbstractBundleOffer implements Offer {
 
-	@JsonProperty("Products")
-	public final Map<Product,Integer> products;
-	@JsonProperty("Argument")
-	public final double argument;
-	private Discount discount = null;
 	@JsonProperty("Type")
-	public final OfferType type = OfferType.AmountBundle;
+	private final OfferType type = OfferType.AmountBundle;
+
+	@JsonProperty("Products")
+	private final Map<String,Integer> products;
+
+	@JsonProperty("Argument")
+	private final double argument;
+	private Discount discount = null;
 
 
-	public AmountBundleOffer(Map<Product,Integer> products, double argument) {
+	public AmountBundleOffer(Map<String,Integer> products, double argument) {
 		this.argument = argument;
 		this.products = products;
 	}
 
-	@Override
-	public OfferType getType() {
-		return type;
-	}
 
 	@Override
-	public Double getArgument() {
-		return argument;
-	}
-
-	@Override
-	public Map<Product,Integer> getProducts() {
+	public Map<String,Integer> getProducts() {
 		return products;
 	}
 
+	@JsonIgnore
 	@Override
 	public Discount getDiscount() {
 		return discount;
@@ -61,11 +48,11 @@ public class AmountBundleOffer extends AbstractBundleOffer implements Offer {
 
 
 	@Override
-	public Map<Product, Double> calculateDiscount(Map<Product, Double> items, SupermarketCatalog catalog) {
+	public Map<String, Double> calculateDiscount(Map<String, Double> items, SupermarketCatalog catalog) {
 
 		// Vérification des quantités de chaque produit concerné par l'offre
 		boolean checkedQuantities = true;
-		for(Map.Entry<Product,Integer> product : products.entrySet()){
+		for(Map.Entry<String,Integer> product : products.entrySet()){
 			if(product.getValue() > items.get(product.getKey())){
 				checkedQuantities = false;
 				break;
@@ -88,11 +75,30 @@ public class AmountBundleOffer extends AbstractBundleOffer implements Offer {
 			discountTotal -= argument*numberOfXs;
 
 			// Ecriture du Discount
-			String name = products.keySet().stream().map(Product::getName).collect(Collectors.joining( " & " ));
+			String name = String.join(" & ", products.keySet());
 			discount = new Discount(name,  "BundleOffer for " + argument, discountTotal);
 		}
 
 		return items;
+	}
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AmountBundleOffer offer = (AmountBundleOffer) o;
+		return Objects.equals(type, offer.type) &&
+			argument == offer.argument &&
+			discount == offer.discount &&
+			Objects.equals(products,offer.products);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(type,argument,discount,products);
 	}
 
 }

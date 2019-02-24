@@ -22,7 +22,7 @@ public class ReceiptPrinter {
 		for (ReceiptItem item : receipt.getItems()) {
 			String price = String.format(Locale.UK, "%.2f", item.getTotalPrice());
 			String quantity = presentQuantity(item);
-			String name = item.getProduct().getName();
+			String name = item.getProduct();
 			String unitPrice = String.format(Locale.UK, "%.2f", item.getPrice());
 
 			int whitespaceSize = this.columns - name.length() - price.length();
@@ -55,7 +55,7 @@ public class ReceiptPrinter {
 	}
 
 	private static String presentQuantity(ReceiptItem item) {
-		return ProductUnit.Each.equals(item.getProduct().getUnit())
+		return ProductUnit.Each.equals(item.getUnit())
 			? String.format("%x", (int)item.getQuantity())
 			: String.format(Locale.UK, "%.3f", item.getQuantity());
 	}

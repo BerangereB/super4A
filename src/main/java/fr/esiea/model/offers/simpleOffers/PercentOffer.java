@@ -1,60 +1,57 @@
 package fr.esiea.model.offers.simpleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 
 /**
  * Offre qui applique une réduction de argument%
  */
 public class PercentOffer implements Offer {
 
-	@JsonProperty("Product")
-	public final Product product;
-	@JsonProperty("Argument")
-	public final double argument;
-	private Discount discount = null;
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.Percent;
+	@JsonProperty("Product")
+	public final String product;
+	@JsonProperty("Argument")
+	private final double argument;
+	private Discount discount = null;
 
 
-	public PercentOffer(Product product, double argument) {
+
+	public PercentOffer(String product, double argument) {
 		this.argument = argument;
 		this.product = product;
 	}
 
+	@JsonIgnore
 	@Override
-	public Map<Product,Integer> getProducts()
+	public Map<String,Integer> getProducts()
 	{
-		Map<Product,Integer> product = new HashMap<Product,Integer>();
+		Map<String,Integer> product = new HashMap<String,Integer>();
 		product.put(this.product,1);
 		return product;
 	}
 
-	@Override
-	public Double getArgument() {
-		return argument;
-	}
-
+	@JsonIgnore
 	@Override
 	public Discount getDiscount() {
 		return discount;
 	}
 
 	@Override
-	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
+	public Map<String, Double> calculateDiscount(Map<String, Double> productQuantities, SupermarketCatalog catalog) {
 		double quantity = productQuantities.get(product);
 		double unitPrice = catalog.getUnitPrice(product);
-		discount = new Discount(product.getName(), argument + "% off", quantity * unitPrice * argument / 100.0);
+		discount = new Discount(product, argument + "% off", quantity * unitPrice * argument / 100.0);
 
 		// On applique l'offre sur l'ensemble des produits concernés donc on remove le produit du caddie
 		productQuantities.remove(product);
@@ -62,9 +59,22 @@ public class PercentOffer implements Offer {
 	}
 
 
+
 	@Override
-	public OfferType getType() {
-		return type;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PercentOffer offer = (PercentOffer) o;
+		return Objects.equals(type, offer.type) &&
+			argument == offer.argument &&
+			discount == offer.discount &&
+			Objects.equals(product,offer.product);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(type,argument,discount,product);
 	}
 
 }

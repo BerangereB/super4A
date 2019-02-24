@@ -1,15 +1,15 @@
 package fr.esiea.model.market;
 
 public class ProductQuantity {
-	private final Product product;
+	private final String product;
 	private final double quantity;
 
-	public ProductQuantity(Product product, double weight) {
+	public ProductQuantity(String product, double weight) {
 		this.product = product;
 		this.quantity = weight;
 	}
 
-	public Product getProduct() {
+	public String getProduct() {
 		return product;
 	}
 

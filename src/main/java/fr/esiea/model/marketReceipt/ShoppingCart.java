@@ -2,7 +2,6 @@ package fr.esiea.model.marketReceipt;
 
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.market.SupermarketCatalog;
 
@@ -11,23 +10,23 @@ import java.util.*;
 public class ShoppingCart {
 
 	private final ArrayList<ProductQuantity> items = new ArrayList<ProductQuantity>();
-	private Map<Product, Double> productQuantities = new HashMap<Product,Double>();
+	private Map<String, Double> productQuantities = new HashMap<String,Double>();
 
 
 	public List<ProductQuantity> getItems() {
 		return new ArrayList<ProductQuantity>(items);
 	}
 
-	public void addItem(Product product) {
+	public void addItem(String product) {
 		this.addItemQuantity(product, 1.0);
 	}
 
-	public Map<Product, Double> productQuantities() {
+	public Map<String, Double> productQuantities() {
 		return productQuantities;
 	}
 
 
-	public void addItemQuantity(Product product, double quantity) {
+	public void addItemQuantity(String product, double quantity) {
 		items.add(new ProductQuantity(product, quantity));
 		if (productQuantities.containsKey(product)) {
 			productQuantities.put(product, productQuantities.get(product) + quantity);
@@ -37,13 +36,13 @@ public class ShoppingCart {
 	}
 
 	void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
-		Map<Product, Double> products = productQuantities();
+		Map<String, Double> products = productQuantities();
 
 		//pour chaque offre
 		loop:
 		for (Offer offer : offers) {
 			//Vérification de la présence des produits de l'offre dans la copie du caddie
-			for (Product p : offer.getProducts().keySet()) {
+			for (String p : offer.getProducts().keySet()) {
 				if (!products.containsKey(p)) {
 					continue loop;
 				}

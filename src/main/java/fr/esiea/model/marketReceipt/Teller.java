@@ -28,11 +28,11 @@ public class Teller {
 		Receipt receipt = new Receipt();
 		List<ProductQuantity> productQuantities = theCart.getItems();
 		for (ProductQuantity pq: productQuantities) {
-			Product p = pq.getProduct();
+			String p = pq.getProduct();
 			double quantity = pq.getQuantity();
 			double unitPrice = this.catalog.getUnitPrice(p);
 			double price = quantity * unitPrice;
-			receipt.addProduct(p, quantity, unitPrice, price);
+			receipt.addProduct(p,catalog.getProducts().get(p).getUnit(), quantity, unitPrice, price);
 		}
 		theCart.handleOffers(receipt, this.offers, this.catalog);
 
@@ -43,4 +43,7 @@ public class Teller {
 		return offers;
 	}
 
+	public void removeOffer(Offer o) {
+		offers.remove(o);
+	}
 }

@@ -1,36 +1,33 @@
 package fr.esiea.model.offers.simpleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Cette offre s'applique sur un produit : 3 pour le prix de 2
  */
 public class ThreeForTwoOffer implements Offer {
 
-	@JsonProperty("Product")
-	public final Product product;
-	private Discount discount = null;
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.ThreeForTwo;
+	@JsonProperty("Product")
+	public final String product;
+	private Discount discount = null;
 
 
-	public ThreeForTwoOffer(Product product) {
+	public ThreeForTwoOffer(String product) {
 		this.product = product;
 	}
 
 	@Override
-	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
+	public Map<String, Double> calculateDiscount(Map<String, Double> productQuantities, SupermarketCatalog catalog) {
 		double quantity = productQuantities.get(product);
 		double unitPrice = catalog.getUnitPrice(product);
 		int quantityAsInt = (int) quantity;
@@ -39,7 +36,7 @@ public class ThreeForTwoOffer implements Offer {
 
 		if (quantityAsInt > 2) {
 			double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + quantityAsInt % 3 * unitPrice);
-			discount = new Discount(product.getName(), "3 for 2", discountAmount);
+			discount = new Discount(product, "3 for 2", discountAmount);
 		}
 
 		productQuantities.put(product,(double)quantityAsInt%3);
@@ -47,19 +44,16 @@ public class ThreeForTwoOffer implements Offer {
 		return productQuantities;
 	}
 
+	@JsonIgnore
 	@Override
-	public Map<Product,Integer> getProducts()
+	public Map<String,Integer> getProducts()
 	{
-		Map<Product,Integer> product = new HashMap<Product,Integer>();
+		Map<String,Integer> product = new HashMap<String,Integer>();
 		product.put(this.product,1);
 		return product;
 	}
 
-	@Override
-	public Double getArgument() {
-		return 0.0d;
-	}
-
+	@JsonIgnore
 	@Override
 	public Discount getDiscount() {
 		return discount;
@@ -67,7 +61,19 @@ public class ThreeForTwoOffer implements Offer {
 
 
 	@Override
-	public OfferType getType() {
-		return type;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ThreeForTwoOffer offer = (ThreeForTwoOffer) o;
+		return Objects.equals(type, offer.type) &&
+			discount == offer.discount &&
+			Objects.equals(product,offer.product);
 	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(type,discount,product);
+	}
+
 }

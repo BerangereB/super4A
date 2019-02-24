@@ -1,9 +1,9 @@
 package fr.esiea.model.offers.simpleOffers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
@@ -14,23 +14,26 @@ import java.util.*;
  * 5 unités de ce produit au prix de 'argument'€
  */
 public class FiveForAmountOffer implements Offer {
-	@JsonProperty("Product")
-	public final Product product;
-	@JsonProperty("Argument")
-	public final double argument;
-	private Discount discount = null;
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.FiveForAmount;
 
+	@JsonProperty("Product")
+	public final String product;
 
-	public FiveForAmountOffer(Product product, double argument) {
+	@JsonProperty("Argument")
+	private final double argument;
+	private Discount discount = null;
+
+
+
+	public FiveForAmountOffer(String product, double argument) {
 		this.argument = argument;
 		this.product = product;
 	}
 
 
 	@Override
-	public Map<Product, Double> calculateDiscount(Map<Product, Double> productQuantities, SupermarketCatalog catalog) {
+	public Map<String, Double> calculateDiscount(Map<String, Double> productQuantities, SupermarketCatalog catalog) {
 		double quantity = productQuantities.get(product);
 		int quantityAsInt = (int) quantity;
 
@@ -41,34 +44,44 @@ public class FiveForAmountOffer implements Offer {
 			double unitPrice = catalog.getUnitPrice(product);
 
 			double discountTotal = unitPrice * quantity - (argument * numberOfXs + quantityAsInt % 5 * unitPrice);
-			discount = new Discount(product.getName(), 5 + " for " + argument, discountTotal);
+			discount = new Discount(product, 5 + " for " + argument, discountTotal);
 		}
 		// On modifie la quantité du produit dans le caddie
-		productQuantities.put(product,(double)quantityAsInt % 5);
+		productQuantities.put(product, (double) quantityAsInt % 5);
 
 		return productQuantities;
 	}
 
+	@JsonIgnore
 	@Override
-	public Map<Product,Integer> getProducts()
-	{
-		Map<Product,Integer> product = new HashMap<Product,Integer>();
-		product.put(this.product,1);
+	public Map<String, Integer> getProducts() {
+		Map<String, Integer> product = new HashMap<String, Integer>();
+		product.put(this.product, 1);
 		return product;
 	}
 
-	@Override
-	public Double getArgument() {
-		return argument;
-	}
-
+	@JsonIgnore
 	@Override
 	public Discount getDiscount() {
 		return discount;
 	}
 
+
 	@Override
-	public OfferType getType() {
-		return type;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FiveForAmountOffer offer = (FiveForAmountOffer) o;
+		return Objects.equals(type, offer.type) &&
+			argument == offer.argument &&
+			discount == offer.discount &&
+			Objects.equals(product,offer.product);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(type,argument,discount,product);
 	}
 }
+

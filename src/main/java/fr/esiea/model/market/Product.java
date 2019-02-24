@@ -1,7 +1,6 @@
 package fr.esiea.model.market;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
@@ -10,11 +9,11 @@ import java.util.Objects;
 public class Product {
 
 	@JsonProperty("Name")
-	public String name;
+	private String name;
 	@JsonProperty("Unit")
-	public ProductUnit unit;
+	private ProductUnit unit;
 	@JsonProperty("Price")
-	public double price;
+	private double price;
 
 	public Product() {}
 
@@ -36,10 +35,6 @@ public class Product {
 		return price;
 	}
 
-	public void setPrice(double newPrice) {
-		this.price = newPrice;
-	}
-
 
 	@Override
 	public boolean equals(Object o) {
@@ -47,13 +42,14 @@ public class Product {
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
 		return Objects.equals(name, product.name) &&
-			unit == product.unit;
+			unit == product.unit &&
+			price == product.price;
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(name, unit);
+		return Objects.hash(name, unit,price);
 	}
 
 }

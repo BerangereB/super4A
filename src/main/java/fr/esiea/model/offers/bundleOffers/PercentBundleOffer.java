@@ -1,17 +1,16 @@
 package fr.esiea.model.offers.bundleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
-import fr.esiea.model.market.Product;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 /**
  * Cette offre s'applique sur un ensemble de produits
@@ -19,42 +18,39 @@ import java.util.stream.Collectors;
  */
 public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 
-	@JsonProperty("Products")
-	public final Map<Product,Integer> products;
-	@JsonProperty("Argument")
-	public final double argument;
-	private Discount discount = null;
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.PercentBundle;
+	@JsonProperty("Products")
+	private final Map<String,Integer> products;
+	@JsonProperty("Argument")
+	private final double argument;
+	private Discount discount = null;
 
 
-	public PercentBundleOffer(Map<Product,Integer> products, double argument) {
+
+	public PercentBundleOffer(Map<String,Integer> products, double argument) {
 		this.argument = argument;
 		this.products = products;
 	}
 
 	@Override
-	public Double getArgument() {
-		return argument;
-	}
-
-	@Override
-	public Map<Product,Integer> getProducts() {
+	public Map<String,Integer> getProducts() {
 		return products;
 	}
 
 
+	@JsonIgnore
 	@Override
 	public Discount getDiscount() {
 		return discount;
 	}
 
 	@Override
-	public Map<Product, Double> calculateDiscount(Map<Product, Double> items, SupermarketCatalog catalog) {
+	public Map<String, Double> calculateDiscount(Map<String, Double> items, SupermarketCatalog catalog) {
 
 		// Vérification des quantités
 		boolean checkedQuantities = true;
-		for(Map.Entry<Product,Integer> product : products.entrySet()){
+		for(Map.Entry<String,Integer> product : products.entrySet()){
 			if(product.getValue() > items.get(product.getKey())){
 				checkedQuantities = false;
 				break;
@@ -70,7 +66,7 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 
 			double discountTotal = getTotalDiscount(products,items,catalog,numberOfXs,offer_function);
 
-			String name = products.keySet().stream().map(Product::getName).collect(Collectors.joining( " & " ));
+			String name = String.join(" & ", products.keySet());
 			discount = new Discount(name,  "BundleOffer for " + argument, discountTotal);
 		}
 
@@ -78,8 +74,21 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	}
 
 	@Override
-	public OfferType getType() {
-		return type;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PercentBundleOffer offer = (PercentBundleOffer) o;
+		return Objects.equals(type, offer.type) &&
+			argument == offer.argument &&
+			discount == offer.discount &&
+			Objects.equals(products,offer.products);
 	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(type,argument,discount,products);
+	}
+
 }
 

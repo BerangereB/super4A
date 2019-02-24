@@ -5,9 +5,7 @@ import java.util.Map;
 public interface SupermarketCatalog {
 	void addProduct(Product product);
 
-	void removeProduct(String name);
-
-	double getUnitPrice(Product product);
+	double getUnitPrice(String product);
 
 	Map<String, Product> getProducts();
 
