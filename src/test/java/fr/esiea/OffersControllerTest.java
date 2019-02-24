@@ -11,7 +11,6 @@ import fr.esiea.web.SupermarketService;
 import fr.esiea.web.exceptions.OfferIndexNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -149,9 +148,6 @@ public class OffersControllerTest {
 	public void testActivateOffer_atIndex_0_inInactiveOffers_while_no_offer_inactive_return_exception(){
 		controller.activateOffer(0);
 	}
-
-
-
 
 }
 
