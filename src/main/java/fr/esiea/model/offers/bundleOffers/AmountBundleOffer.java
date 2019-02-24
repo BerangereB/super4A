@@ -2,6 +2,7 @@ package fr.esiea.model.offers.bundleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.xml.internal.bind.v2.TODO;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.SupermarketCatalog;
@@ -28,7 +29,7 @@ public class AmountBundleOffer extends AbstractBundleOffer implements Offer {
 	private final double argument;
 	private Discount discount = null;
 
-
+	// TODO: refactor Map<String,Integer> products -> Product/ProductQuantity
 	public AmountBundleOffer(Map<String,Integer> products, double argument) {
 		this.argument = argument;
 		this.products = products;

@@ -27,7 +27,7 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	private Discount discount = null;
 
 
-
+	// TODO: refactor
 	public PercentBundleOffer(Map<String,Integer> products, double argument) {
 		this.argument = argument;
 		this.products = products;
