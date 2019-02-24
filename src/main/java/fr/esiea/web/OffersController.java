@@ -18,6 +18,7 @@ public class OffersController {
 	public List<Offer> getActiveOffers(){
 		return SupermarketService.getActiveOffers("");
 	}
+
 	@GetMapping(value="active/simple", produces = "application/json")
 	public List<Offer> getSimpleActiveOffers(){
 		return SupermarketService.getActiveOffers("simple");
@@ -43,7 +44,7 @@ public class OffersController {
 		Offer o = SupermarketService.activateOffer(index);
 		if(o!= null){
 			return o;
-		}else{
+		} else{
 			throw new OfferIndexNotFoundException();
 		}
 	}
@@ -53,11 +54,9 @@ public class OffersController {
 		Offer o = SupermarketService.deactivateOffer(index);
 		if(o!= null){
 			return o;
-		}else{
+		} else{
 			throw new OfferIndexNotFoundException();
 		}
 	}
-
-
 
 }

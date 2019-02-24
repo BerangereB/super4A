@@ -13,6 +13,11 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 	}
 
 	@Override
+	public void deleteProduct(String productName){
+		this.products.remove(productName);
+	}
+
+	@Override
 	public double getUnitPrice(String p) {
 		return this.products.get(p).getPrice();
 	}
@@ -21,6 +26,7 @@ public class SimpleSupermarketCatalog implements SupermarketCatalog {
 	public Map<String, Product> getProducts() {
 		return products;
 	}
+
 
 
 }
