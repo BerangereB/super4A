@@ -1,4 +1,4 @@
-package fr.esiea;
+package fr.esiea.web;
 
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;

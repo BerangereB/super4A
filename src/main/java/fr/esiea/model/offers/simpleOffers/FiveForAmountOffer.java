@@ -2,6 +2,7 @@ package fr.esiea.model.offers.simpleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.SupermarketCatalog;
@@ -54,9 +55,9 @@ public class FiveForAmountOffer implements Offer {
 
 	@JsonIgnore
 	@Override
-	public Map<String, Integer> getProducts() {
-		Map<String, Integer> product = new HashMap<String, Integer>();
-		product.put(this.product, 1);
+	public List<ProductQuantity> getProducts() {
+		List<ProductQuantity> product = new ArrayList<ProductQuantity>();
+		product.add(new ProductQuantity(this.product, 1.0));
 		return product;
 	}
 

@@ -1,6 +1,5 @@
 package fr.esiea.model.marketReceipt;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.ProductQuantity;
@@ -54,8 +53,8 @@ public class ShoppingCart {
 		loop:
 		for (Offer offer : offers) {
 			//Vérification de la présence des produits de l'offre dans la copie du caddie
-			for (String p : offer.getProducts().keySet()) {
-				if (!products.containsKey(p)) {
+			for (ProductQuantity p : offer.getProducts()) {
+				if (!products.containsKey(p.getProduct())) {
 					continue loop;
 				}
 			}

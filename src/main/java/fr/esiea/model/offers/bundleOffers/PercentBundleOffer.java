@@ -3,14 +3,17 @@ package fr.esiea.model.offers.bundleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * Cette offre s'applique sur un ensemble de produits
@@ -21,20 +24,20 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.PercentBundle;
 	@JsonProperty("Products")
-	private final Map<String,Integer> products;
+	private final List<ProductQuantity> products;
 	@JsonProperty("Argument")
 	private final double argument;
 	private Discount discount = null;
 
 
 	// TODO: refactor
-	public PercentBundleOffer(Map<String,Integer> products, double argument) {
+	public PercentBundleOffer(List<ProductQuantity> products, double argument) {
 		this.argument = argument;
 		this.products = products;
 	}
 
 	@Override
-	public Map<String,Integer> getProducts() {
+	public List<ProductQuantity> getProducts() {
 		return products;
 	}
 
@@ -50,8 +53,8 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 
 		// Vérification des quantités
 		boolean checkedQuantities = true;
-		for(Map.Entry<String,Integer> product : products.entrySet()){
-			if(product.getValue() > items.get(product.getKey())){
+		for(ProductQuantity product : products){
+			if(product.getQuantity() > items.get(product.getProduct())){
 				checkedQuantities = false;
 				break;
 			}
@@ -62,11 +65,11 @@ public class PercentBundleOffer extends AbstractBundleOffer implements Offer {
 			// On compte le nombre de lots
 			int numberOfXs =getNumberOfPacks(products,items);
 
-			BiFunction<Integer,Double, Double> offer_function = (X, Y) -> X * Y * numberOfXs * (100 - argument)/100;
+			BiFunction<Double,Double, Double> offer_function = (X, Y) -> X * Y * numberOfXs * (100 - argument)/100;
 
 			double discountTotal = getTotalDiscount(products,items,catalog,numberOfXs,offer_function);
 
-			String name = String.join(" & ", products.keySet());
+			String name = products.stream().map(ProductQuantity::getProduct).collect(Collectors.joining(" & "));
 			discount = new Discount(name,  "BundleOffer for " + argument, discountTotal);
 		}
 

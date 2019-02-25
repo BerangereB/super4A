@@ -29,10 +29,6 @@ public class OffersController {
 		return SupermarketService.getActiveOffers("bundle");
 	}
 
-	@GetMapping(value="active/findByProduct/{name}", produces = "application/json")
-	public List<Offer> getActiveOffersByProduct(@PathVariable String name){
-		return SupermarketService.findActiveOffersWithProduct(name);
-	}
 
 	@GetMapping(value="inactive", produces = "application/json")
 	public List<Offer> getInactiveOffers(){

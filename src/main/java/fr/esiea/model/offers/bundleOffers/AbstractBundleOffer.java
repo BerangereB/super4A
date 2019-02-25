@@ -1,20 +1,23 @@
 package fr.esiea.model.offers.bundleOffers;
 
 
+import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.market.SupermarketCatalog;
+
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
 class AbstractBundleOffer {
 
 
-	int getNumberOfPacks(Map<String, Integer> products, Map<String, Double> items){
+	int getNumberOfPacks(List<ProductQuantity> products, Map<String, Double> items){
 
 		int numberOfXs = 100; // max packs
 
-		for(Map.Entry<String,Integer> productEntry : products.entrySet()) {
-			int x = productEntry.getValue();
-			double quantity = items.get(productEntry.getKey());
+		for(ProductQuantity product : products) {
+			int x = (int) product.getQuantity();
+			double quantity = items.get(product.getProduct());
 			int quantityAsInt = (int)quantity;
 
 			numberOfXs = Math.min(numberOfXs,quantityAsInt/x);
@@ -24,11 +27,11 @@ class AbstractBundleOffer {
 	}
 
 
-	double getTotalDiscount(Map<String, Integer> products, Map<String, Double> items, SupermarketCatalog catalog, int numberOfXs, BiFunction<Integer, Double, Double> offer_function){
+	double getTotalDiscount(List<ProductQuantity> products, Map<String, Double> items, SupermarketCatalog catalog, int numberOfXs, BiFunction<Double, Double, Double> offer_function){
 		double discountTotal = 0;
-		for(Map.Entry<String,Integer> productEntry : products.entrySet()){
-			String product = productEntry.getKey();
-			int quantity_offer = productEntry.getValue();
+		for(ProductQuantity productQ : products){
+			String product = productQ.getProduct();
+			double quantity_offer = productQ.getQuantity();
 
 			double quantity = items.get(product);
 			double unitPrice = catalog.getUnitPrice(product);

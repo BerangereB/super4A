@@ -1,22 +1,18 @@
 package fr.esiea.model;
 
-import fr.esiea.model.market.SimpleSupermarketCatalog;
+import fr.esiea.model.market.*;
 import fr.esiea.model.offers.BundleOfferFactory;
+import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
-import fr.esiea.model.market.Product;
-import fr.esiea.model.market.ProductUnit;
-import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.marketReceipt.Receipt;
 import fr.esiea.model.marketReceipt.ReceiptPrinter;
 import fr.esiea.model.marketReceipt.ShoppingCart;
 import fr.esiea.model.marketReceipt.Teller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -95,7 +91,6 @@ class SupermarketTest {
 	void fiveForAmount(){
 		final double 	price = 0.99;
 		final int 		quantity = 4;
-		final double 	expected = price;
 		final Product 	toothbrush = new Product("toothbrush", ProductUnit.Each, price);
 
 		ShoppingCart cart = new ShoppingCart();
@@ -108,7 +103,7 @@ class SupermarketTest {
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		double current = receipt.getTotalPrice();
 
-		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+		assertThat(current).as("Receipt total price").isEqualTo(price, within(0.001));
 	}
 
 	@Test
@@ -245,9 +240,9 @@ class SupermarketTest {
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(toothpaste);
 
-		Map<String,Integer> products = new HashMap<String,Integer>();
-		products.put(toothbrush.getName(),2);
-		products.put(toothpaste.getName(),1);
+		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
+		products.add(new ProductQuantity(toothbrush.getName(),2));
+		products.add(new ProductQuantity(toothpaste.getName(),1));
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.AmountBundle,products,amount));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
@@ -281,8 +276,9 @@ class SupermarketTest {
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(toothpaste);
 
-		Map<String,Integer> products = new HashMap<String,Integer>();
-		products.put(toothbrush.getName(),2);products.put(toothpaste.getName(),1);
+		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
+		products.add(new ProductQuantity(toothbrush.getName(),2));
+		products.add(new ProductQuantity(toothpaste.getName(),1));
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
@@ -315,8 +311,9 @@ class SupermarketTest {
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(toothpaste);
 
-		Map<String,Integer> products = new HashMap<String,Integer>();
-		products.put(toothbrush.getName(),2);products.put(toothpaste.getName(),1);
+		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
+		products.add(new ProductQuantity(toothbrush.getName(),2));
+		products.add(new ProductQuantity(toothpaste.getName(),1));
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
 
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
@@ -355,8 +352,9 @@ class SupermarketTest {
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(toothpaste);
 
-		Map<String,Integer> products = new HashMap<String,Integer>();
-		products.put(toothbrush.getName(),2);products.put(toothpaste.getName(),1);
+		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
+		products.add(new ProductQuantity(toothbrush.getName(),2));
+		products.add(new ProductQuantity(toothpaste.getName(),1));
 
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.AmountBundle,products,amount));
@@ -370,5 +368,20 @@ class SupermarketTest {
 
 
 		assertThat(current).as("Receipt total price").isEqualTo(expected, within(0.001));
+	}
+
+
+	@Test
+	public void testRemoveOfferInTeller(){
+		Offer o = SimpleOfferFactory.getOffer(OfferType.TwoForAmount,"toothbrush", 1.5);
+		teller.addSpecialOffer(o);
+		teller.removeOffer(o);
+		assertThat(teller.getOffers()).doesNotContain(o);
+	}
+
+	@Test
+	public void testDeleteProductInCatalog(){
+		catalog.deleteProduct("toothbrush");
+		assertThat(catalog.getProducts().keySet()).doesNotContain("toothbrush");
 	}
 }

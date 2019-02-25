@@ -1,9 +1,6 @@
 package fr.esiea.web;
 
-import fr.esiea.model.market.Product;
-import fr.esiea.model.market.ProductUnit;
-import fr.esiea.model.market.SimpleSupermarketCatalog;
-import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.market.*;
 import fr.esiea.model.marketReceipt.Teller;
 import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
@@ -58,10 +55,6 @@ public class SupermarketService {
 		return res;
 	}
 
-	public static List<Offer> findActiveOffersWithProduct(String name) {
-		return teller.getOffers().stream().filter(x -> x.getProducts().containsKey(name)).collect(Collectors.toList());
-	}
-
 	public static List<Offer> getInactiveOffers() {
 		return inactiveOffers;
 	}
@@ -111,9 +104,9 @@ public class SupermarketService {
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, toothbrush.getName(), 0.0));
 		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount, toothpaste.getName(), 2.5));
 
-		Map<String,Integer> productsBundle = new HashMap<String, Integer>();
-		productsBundle.put(toothbrush.getName(),2);
-		productsBundle.put(toothpaste.getName(),2);
+		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
+		productsBundle.add(new ProductQuantity(toothbrush.getName(),2));
+		productsBundle.add(new ProductQuantity(toothpaste.getName(),2));
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,
 			productsBundle,
 			20));

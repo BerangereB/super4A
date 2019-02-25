@@ -50,7 +50,6 @@ It means the server failed to fulfill an apparently valid request.
 - display inactive offers : ```GET /supermarket/offers/inactive```
 - display simple offers : ```GET /supermarket/offers/active/simple```
 - display bundle offers : ```GET /supermarket/offers/active/bundle```
-- find offers by specific product : ```GET /supermarket/offers/active/findByProduct/{productName}```
 - activate an Offer whose index is given in inactive offers : ```GET /supermarket/offers/activate/{index}```
 - deactivate an Offer whose index is given in active offers : ```GET /supermarket/offers/deactivate/{index}```
 
