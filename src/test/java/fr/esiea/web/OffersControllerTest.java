@@ -7,8 +7,6 @@ import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
-import fr.esiea.web.OffersController;
-import fr.esiea.web.SupermarketService;
 import fr.esiea.web.exceptions.OfferIndexNotFoundException;
 import org.junit.Before;
 import org.junit.Test;

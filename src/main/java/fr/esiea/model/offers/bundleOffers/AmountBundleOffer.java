@@ -2,7 +2,6 @@ package fr.esiea.model.offers.bundleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.xml.internal.bind.v2.TODO;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
@@ -12,9 +11,7 @@ import fr.esiea.model.offers.OfferType;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
