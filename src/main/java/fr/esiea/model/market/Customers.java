@@ -5,9 +5,9 @@ package fr.esiea.model.market;
  * @project super4A - fr.esiea.model.market
  */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.marketReceipt.ShoppingCart;
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Customers {
@@ -17,7 +17,7 @@ public enum Customers {
 	private static int numberOfAccounts = 0;
 
 	Customers() {
-		customers = new HashMap<>();
+		customers = new LinkedHashMap<>();
 	}
 
 	public int createCustomer(final ShoppingCart cart) {
@@ -30,12 +30,24 @@ public enum Customers {
 		return this.customers;
 	}
 
-	public void addProductToShoppingCart(final int customerID, final String product) {
-		this.customers.get(customerID).addItem(product);
+	public boolean addProductToShoppingCart(final int customerID, final ProductQuantity productQuantity) {
+		ShoppingCart cart = this.customers.get(customerID);
+		if(cart != null){
+			cart.addItemQuantity(productQuantity.getProduct(),productQuantity.getQuantity());
+			//customers.put(customerID,cart);
+			return true;
+		}
+		return false;
 	}
 
-	public void removeProductFromShoppingCart(final int customerID, final String product) {
-		this.customers.get(customerID).removeItem(product);
+	public boolean removeProductFromShoppingCart(final int customerID, final ProductQuantity productQuantity) {
+		ShoppingCart cart = this.customers.get(customerID);
+		if(cart != null){
+			cart.removeItemQuantity(productQuantity.getProduct(),productQuantity.getQuantity());
+			//customers.put(customerID,cart);
+			return true;
+		}
+		return false;
 	}
 
 	public ShoppingCart getShoppingCartById(final int customerID) {

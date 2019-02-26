@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductQuantity {
 	@JsonProperty("Product")
-	private final String product;
+	private String product;
 	@JsonProperty("Quantity")
-	private final double quantity;
+	private double quantity;
+
+	public ProductQuantity(){}
 
 	public ProductQuantity(String product, double weight) {
 		this.product = product;

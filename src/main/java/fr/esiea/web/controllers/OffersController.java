@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class OffersController {
 
-	public SupermarketService service = new SupermarketService();
+	public SupermarketService service = SupermarketService.SERVICE;
 
 	@GetMapping(value="active", produces = "application/json")
 	public List<Offer> getActiveOffers(){

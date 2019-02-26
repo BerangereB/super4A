@@ -1,32 +1,30 @@
 package fr.esiea.model.marketReceipt;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.market.SupermarketCatalog;
+import fr.esiea.model.offers.Offer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ShoppingCart {
 
-	//TODO : to optimise/readapt -> duplicates
+	@JsonIgnore
 	private final ArrayList<ProductQuantity> items = new ArrayList<ProductQuantity>();
-	private Map<String, Double> productQuantities = new HashMap<String,Double>();
-
+	@JsonProperty("Products")
+	private Map<String, Double> productQuantities = new LinkedHashMap<String,Double>();
 
 	public List<ProductQuantity> getItems() {
 		return new ArrayList<ProductQuantity>(items);
 	}
-
 	public void addItem(String product) {
 		this.addItemQuantity(product, 1.0);
 	}
-
-	public void removeItem(String product) {
-		this.removeItemQuantity(product, 1.0);
-	}
-
 	public Map<String, Double> productQuantities() {
 		return productQuantities;
 	}
@@ -41,12 +39,12 @@ public class ShoppingCart {
 		}
 	}
 
-	//can be private
+
 	public void removeItemQuantity(String product, double quantity) {
 		items.remove(new ProductQuantity(product, quantity));
 		productQuantities.remove(product);
 	}
-	//	TODO: unacceptable
+
 	void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
 		Map<String, Double> products = productQuantities();
 

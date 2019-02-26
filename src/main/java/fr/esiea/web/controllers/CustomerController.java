@@ -1,10 +1,12 @@
 package fr.esiea.web.controllers;
 
 import fr.esiea.model.market.Product;
+import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.marketReceipt.Receipt;
 import fr.esiea.model.marketReceipt.ReceiptPrinter;
 import fr.esiea.model.marketReceipt.ShoppingCart;
 import fr.esiea.web.SupermarketService;
+import fr.esiea.web.exceptions.CustomerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,36 +18,67 @@ import java.util.UUID;
  * @author Quentin on 24/02/2019
  * @project super4A - fr.esiea.web
  */
+@RequestMapping("/supermarket/customers")
 @RestController
 public class CustomerController {
 
-	SupermarketService service = new SupermarketService();
+	public SupermarketService service = SupermarketService.SERVICE;
 
-	@GetMapping(value = "/supermarket/customers/", produces = "application/json")
+	@GetMapping(value = "", produces = "application/json")
 	public Map<Integer, ShoppingCart> getCustomers() {
 		return service.getCustomers();
 	}
 
-	@GetMapping(value = "/supermarket/customers/{id}", produces = "application/json")
+	@GetMapping(value = "/{id}", produces = "application/json")
 	public ShoppingCart getCustomerById(@PathVariable final int id) {
-		return service.getCustomerById(id);
-	}
-
-	// To perfect
-	@PostMapping(value = "/supermarket/customers/{id}", produces = "application/json", consumes = "application/json")
-	public ResponseEntity addProductToCart(@PathVariable final int id, @RequestBody String product) {
-		boolean res = service.addProductToCart(id, product);
-		if(res){
-			return new ResponseEntity(HttpStatus.OK);
+		ShoppingCart cart = service.getCustomerById(id);
+		if(cart != null){
+			return cart;
 		} else {
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new CustomerNotFoundException();
 		}
 	}
 
 
-	@GetMapping(value = "/supermarket/customers/{id}", produces = "text/plain")
-	public ResponseEntity getReceipt(@PathVariable final int id) {
-		//service.
-		return new ResponseEntity(HttpStatus.OK);
+	@PostMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+	public ProductQuantity addProductToCart(@PathVariable final int id, @RequestBody ProductQuantity pq) {
+		boolean res = service.addProductToCart(id, pq);
+		if(res){
+			return pq;
+		} else {
+			throw new CustomerNotFoundException();
+		}
+	}
+
+	// To perfect
+	@DeleteMapping(value = "/remove/{id}", produces = "application/json", consumes = "application/json")
+	public ProductQuantity removeProductToCart(@PathVariable final int id, @RequestBody ProductQuantity pq) {
+		boolean res = service.removeProductToCart(id, pq);
+		if(res){
+			return pq;
+		} else {
+			throw new CustomerNotFoundException();
+		}
+	}
+
+
+	@GetMapping(value = "/receipt/{id}", produces = "text/plain")
+	public String getReceipt(@PathVariable final int id) {
+		Receipt receipt = service.getCustomerReceipt(id);
+		if(receipt != null){
+			return receipt.getTotalPrice().toString();
+		} else {
+			throw new CustomerNotFoundException();
+		}
+	}
+
+	@GetMapping(value = "/printedReceipt/{id}", produces = "text/plain")
+	public String getPrintedReceipt(@PathVariable final int id) {
+		String receipt = service.getCustomerPrintedReceipt(id);
+		if(receipt != null){
+			return receipt;
+		} else {
+			throw new CustomerNotFoundException();
+		}
 	}
 }

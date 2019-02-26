@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-	public SupermarketService service = new SupermarketService();
+	public SupermarketService service = SupermarketService.SERVICE;
 
 	@GetMapping(value = "/supermarket/products", produces = "application/json")
 	public List<Product> getProducts() {
