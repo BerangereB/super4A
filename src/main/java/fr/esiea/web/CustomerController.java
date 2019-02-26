@@ -18,20 +18,22 @@ import java.util.UUID;
 @RestController
 public class CustomerController {
 
+	SupermarketService service = new SupermarketService();
+
 	@GetMapping(value = "/supermarket/customers/", produces = "application/json")
 	public Map<Integer, ShoppingCart> getCustomers() {
-		return SupermarketService.getCustomers();
+		return service.getCustomers();
 	}
 
 	@GetMapping(value = "/supermarket/customers/{id}", produces = "application/json")
 	public ShoppingCart getCustomerById(@PathVariable final int id) {
-		return SupermarketService.getCustomerById(id);
+		return service.getCustomerById(id);
 	}
 
 	// To perfect
 	@PostMapping(value = "/supermarket/customers/{id}", produces = "application/json", consumes = "application/json")
 	public ResponseEntity addProductToCart(@PathVariable final int id, @RequestBody String product) {
-		boolean res = SupermarketService.addProductToCart(id, product);
+		boolean res = service.addProductToCart(id, product);
 		if(res){
 			return new ResponseEntity(HttpStatus.OK);
 		} else {
@@ -42,7 +44,7 @@ public class CustomerController {
 
 	@GetMapping(value = "/supermarket/customers/{id}", produces = "text/plain")
 	public ResponseEntity getReceipt(@PathVariable final int id) {
-		//SupermarketService.
+		//service.
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

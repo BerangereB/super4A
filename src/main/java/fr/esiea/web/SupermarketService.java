@@ -7,32 +7,39 @@ import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class SupermarketService {
-	private static SupermarketCatalog catalog;
-	private static Teller teller;
-	private static List<Offer> inactiveOffers;
-	private static Customers clients;
-	static{
+
+	private SupermarketCatalog catalog;
+	private Teller teller;
+	private List<Offer> inactiveOffers;
+
+	SupermarketService(){
 		reset();
 	}
 
-	public static SupermarketCatalog getCatalog(){
+	public SupermarketCatalog getCatalog(){
 		return catalog;
 	}
 
-	public static Product getProduct(String name) {
+
+	public Product getProduct(String name) {
 		return catalog.getProducts().get(name);
 	}
 
-	public static List<Product> getProducts() {
+	public List<Product> getProducts() {
 		return new ArrayList<Product>(catalog.getProducts().values());
 	}
 
-	public static List<Offer> getActiveOffers(String type ) {
+
+
+
+	public List<Offer> getActiveOffers(String type ) {
 		List<Offer> res = teller.getOffers();
 
 		switch (type){
@@ -52,11 +59,11 @@ public class SupermarketService {
 		return res;
 	}
 
-	public static List<Offer> getInactiveOffers() {
+	public List<Offer> getInactiveOffers() {
 		return inactiveOffers;
 	}
 
-	public static Offer deactivateOffer(int index){
+	public Offer deactivateOffer(int index){
 
 		if(index <0 || index >=teller.getOffers().size()) {
 			return null;
@@ -68,7 +75,7 @@ public class SupermarketService {
 		return o;
 	}
 
-	public static Offer activateOffer(int index){
+	public Offer activateOffer(int index){
 		if(index <0 || index >=inactiveOffers.size()) {
 			return null;
 		}
@@ -79,62 +86,16 @@ public class SupermarketService {
 		return o;
 	}
 
-	public static void reset() {
-		inactiveOffers = new ArrayList<Offer>();
-
-		// init catalog
-		catalog = new SimpleSupermarketCatalog();
-
-		Product toothbrush = new Product("Toothbrush", ProductUnit.Each,0.99);
-		catalog.addProduct(toothbrush);
-		Product toothpaste = new Product("Toothpaste", ProductUnit.Each,0.89);
-		catalog.addProduct(toothpaste);
-		Product apples = new Product("Apples", ProductUnit.Kilo,1.99);
-		catalog.addProduct(apples);
-		Product bananas = new Product("Bananas", ProductUnit.Kilo,2.99);
-		catalog.addProduct(bananas);
-
-		// init Teller
-
-		teller = new Teller(catalog);
-
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, toothbrush.getName(), 0.0));
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount, toothpaste.getName(), 2.5));
-
-		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
-		productsBundle.add(new ProductQuantity(toothbrush.getName(),2));
-		productsBundle.add(new ProductQuantity(toothpaste.getName(),2));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,
-			productsBundle,
-			20));
-
-		//init Customer
-		clients = Customers.INSTANCE;
-
-		//init customers shopping cart
-		ShoppingCart cart1 = new ShoppingCart();
-		cart1.addItemQuantity(apples.getName(), 2.5);
-
-		ShoppingCart cart2 = new ShoppingCart();
-		cart2.addItemQuantity(toothbrush.getName(), 1);
-		cart2.addItemQuantity(toothpaste.getName(), 1);
-
-		clients.createCustomer(cart1);
-		clients.createCustomer(cart2);
-
-
-	}
-
-	public static Product removeProduct(String name) {
-		Product p = SupermarketService.getProduct(name);
+	public Product removeProduct(String name) {
+		Product p = catalog.getProducts().get(name);
 		if(p!=null){
 			catalog.deleteProduct(name);
 		}
 		return p;
 	}
 
-	public static Product addProduct(Product p) {
-		boolean exists = SupermarketService.getProduct(p.getName()) != null;
+	public Product addProduct(Product p) {
+		boolean exists = catalog.getProducts().get(p.getName()) != null;
 		if(!exists){
 			catalog.addProduct(p);
 			return p;
@@ -144,21 +105,32 @@ public class SupermarketService {
 
 	}
 
-	public static Map<Integer, ShoppingCart> getCustomers(){
-		return clients.getCustomers();
+
+	public void reset(){
+		inactiveOffers = new ArrayList<Offer>();
+		catalog = new SimpleSupermarketCatalog();
+		teller = new Teller(catalog);
+
+		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
+		productsBundle.add(new ProductQuantity("toothbrush",2));
+		productsBundle.add(new ProductQuantity("toothpaste",2));
+
+		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, "toothbrush", 0.0));
+		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount, "toothpaste", 2.5));
+		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20));
 	}
 
-	public static ShoppingCart getCustomerById(final int id){
-		return clients.getShoppingCartById(id);
+	public Map<Integer, ShoppingCart> getCustomers() {
+
+		return null;
 	}
 
-	//does not handle quantity ^^' TODO: handle quantity
-	public static boolean addProductToCart(final int id, final String p){
-		try {
-			clients.addProductToShoppingCart(id, p);
-			return true;
-		} catch (Exception e){
-			return false;
-		}
+	public ShoppingCart getCustomerById(int id) {
+		return null;
 	}
+
+	public boolean addProductToCart(int id, String product) {
+		return false;
+	}
+
 }

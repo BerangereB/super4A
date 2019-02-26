@@ -9,30 +9,32 @@ import java.util.List;
 @RestController
 public class ProductController {
 
+	SupermarketService service = new SupermarketService();
+
 	@GetMapping(value = "/supermarket/products", produces = "application/json")
 	public List<Product> getProducts() {
-		return SupermarketService.getProducts();
+		return service.getProducts();
 	}
 
 	@GetMapping(value = "/supermarket/products/{name}", produces = "application/json")
 	public Product getProduct(@PathVariable String name) {
-		Product p = SupermarketService.getProduct(name);
-		if(p!=null){
+		Product p = service.getProduct(name);
+		if(p != null){
 			return p;
 		}else{
 			throw new ProductNotFoundException();
 		}
 	}
 
-	@PostMapping(value = "/supermarket/products/", produces = "application/json")
+	@PostMapping(value = "/supermarket/products", produces = "application/json")
 	public Product addProduct(@RequestBody Product newProduct){
-		return SupermarketService.addProduct(newProduct);
+		return service.addProduct(newProduct);
 
 	}
 
 	@DeleteMapping(value = "/supermarket/products/remove/{name}", produces = "application/json")
 	public Product removeProduct(@PathVariable String name){
-		Product p = SupermarketService.removeProduct(name);
+		Product p = service.removeProduct(name);
 		if(p!=null){
 			return p;
 		}else{

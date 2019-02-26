@@ -1,81 +1,122 @@
 package fr.esiea.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
-import fr.esiea.web.ProductController;
-import fr.esiea.web.SupermarketService;
-import fr.esiea.web.exceptions.ProductNotFoundException;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
 public class ProductControllerTest {
+
+	private static Product toothbrush;
+	private static Product toothpaste;
+	private static Product apples;
+	private static Product bananas;
+
+	private final String URL = "/supermarket/products";
+	private final ObjectMapper mapper = new ObjectMapper();
+
+	@Autowired
+	private MockMvc mvc;
 
 	@Autowired
 	private ProductController controller;
 
 	@Before
-	public void reset(){
-		SupermarketService.reset();
+	public void setUp(){
+		controller.service.reset();
+	}
+
+
+	@BeforeClass
+	public static void initProducts(){
+		toothbrush = new Product("toothbrush", ProductUnit.Each,0.99);
+		toothpaste = new Product("toothpaste", ProductUnit.Each,0.89);
+		apples = new Product("apples", ProductUnit.Kilo,1.99);
+		bananas = new Product("bananas", ProductUnit.Kilo,2.99);
+	}
+	@Test
+	public void testDisplayProducts() throws Exception {
+
+		List<Product> expected = Arrays.asList(toothbrush,toothpaste,apples,bananas);
+
+		String json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
 	@Test
-	public void testDisplayProducts(){
-
-		List<Product> expected = Arrays.asList(
-			new Product("toothbrush", ProductUnit.Each,0.99),
-		    new Product("toothpaste", ProductUnit.Each,0.89),
-		    new Product("apples", ProductUnit.Kilo,1.99),
-		    new Product("bananas", ProductUnit.Kilo,2.99));
-
-		List<Product> result = controller.getProducts();
-
-		assertTrue(expected.size() == result.size() && expected.containsAll(result));
+	public void testDisplayProduct() throws Exception {
+		String json = mapper.writeValueAsString(toothpaste);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/toothpaste").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
 	@Test
-	public void testDisplayProduct(){
-		Product p = new Product("toothpaste", ProductUnit.Each,0.89);
-		assertThat(p).isEqualTo(controller.getProduct("toothpaste"));
-	}
-
-	@Test(expected = ProductNotFoundException.class)
-	public void testDisplayProduct_doesnot_exist_return_error_404(){
-		controller.getProduct("toothpa");
+	public void testDisplayProduct_doesnot_exist_return_error_404() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/toothpte").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is(404));
 	}
 
 
 
 	@Test
-	public void testAddSpoonFromCatalog(){
-		Product p  = new Product("spoon", ProductUnit.Each,1.99);
-		controller.addProduct(p);
-		List<Product> products = SupermarketService.getProducts();
+	public void testAddSpoonInCatalog() throws Exception {
+		Product spoon  = new Product("spoon", ProductUnit.Each,1.99);
+		String json = mapper.writeValueAsString(spoon);
+		mvc.perform(MockMvcRequestBuilders.post(URL)
+			.accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.content(json))
+			.andExpect(status().isOk());
 
-		assertThat(products).contains(p);
+		List<Product> expected = Arrays.asList(toothbrush,toothpaste,apples,bananas,spoon);
+		json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
 	@Test
-	public void testRemoveToothpasteFromCatalog(){
-		Product p = controller.removeProduct("toothpaste");
-		List<Product> products = SupermarketService.getProducts();
+	public void testRemoveToothpasteFromCatalog() throws Exception {
+		String json = mapper.writeValueAsString(toothpaste);
+		mvc.perform(MockMvcRequestBuilders.delete(URL + "/remove/toothpaste")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 
-		assertThat(products).doesNotContain(p);
+		List<Product> expected = Arrays.asList(toothbrush,apples,bananas);
+		json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
-	@Test(expected = ProductNotFoundException.class)
-	public void testRemoveSpoonFromCatalog_error_expected(){
-		controller.removeProduct("spoon");
+	@Test
+	public void testRemoveSpoonFromCatalog_error_expected() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.delete(URL + "/remove/spoon")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is(404));
 	}
 }

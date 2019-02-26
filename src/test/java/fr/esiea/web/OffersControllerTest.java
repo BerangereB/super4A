@@ -1,5 +1,6 @@
 package fr.esiea.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.market.ProductUnit;
@@ -7,33 +8,48 @@ import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
-import fr.esiea.web.exceptions.OfferIndexNotFoundException;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.*;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
 public class OffersControllerTest {
 
-	private Offer offer1;
-	private Offer offer2;
-	private Offer offer3;
+	private static Offer offer1;
+	private static Offer offer2;
+	private static Offer offer3;
+
+	private final String URL = "/supermarket/offers";
+	private final ObjectMapper mapper = new ObjectMapper();
+
+	@Autowired
+	private MockMvc mvc;
 
 	@Autowired
 	private OffersController controller;
 
 	@Before
-	public void initOffers(){
+	public void setUp(){
+		controller.service.reset();
+	}
+
+	@BeforeClass
+	public static void initOffers(){
 		Product toothbrush = new Product("toothbrush", ProductUnit.Each,0.99);
 		Product toothpaste = new Product("Toothpaste", ProductUnit.Each,0.89);
 		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
@@ -46,96 +62,108 @@ public class OffersControllerTest {
 
 	}
 
-	@Before
-	public void resetTeller(){
-		SupermarketService.reset();
+	@Test
+	public void testDisplayAllOffers() throws Exception {
+		List<Offer> offers = Arrays.asList(offer1,offer2,offer3);
+		String json = mapper.writeValueAsString(offers);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
 	@Test
-	public void testDisplayAllOffers(){
-		List<Offer> expected = Arrays.asList(offer1,offer2,offer3);
-
-		List<Offer> result = controller.getActiveOffers();
-
-		assertTrue(expected.size() == result.size() && expected.containsAll(result));
-	}
-
-	@Test
-	public void testDisplayInactiveOffersAfterDeactivateOne(){
-
-		controller.deactivateOffer(0);
-		List<Offer> inactiveOffers = controller.getInactiveOffers();
-
-		assertTrue(1 == inactiveOffers.size() && inactiveOffers.contains(offer1));
-	}
-
-
-	@Test
-	public void testDisplaySimpleOffers(){
+	public void testDisplaySimpleOffers() throws Exception {
 
 		List<Offer> expected = Arrays.asList(offer1,offer2);
 
-		List<Offer> result = controller.getSimpleActiveOffers();
+		String json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active/simple").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 
-		assertTrue(expected.size() == result.size() && expected.containsAll(result));
 	}
-
 
 	@Test
-	public void testDisplayBundleOffers(){
+	public void testDisplayInactiveOffersAfterDeactivateOne() throws Exception {
 
-		List<Offer> expected = new ArrayList<Offer>();
-		expected.add(offer3);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/deactivate/0").accept(MediaType.APPLICATION_JSON));
 
-		List<Offer> result = controller.getBundleActiveOffers();
-
-		assertTrue(expected.size() == result.size() && expected.containsAll(result));
+		List<Offer> offers = Arrays.asList(offer2,offer3);
+		String json = mapper.writeValueAsString(offers);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
 	}
 
-
-
-
-	@Test
-	public void testDeactivateOffer_atIndex_0_inActiveOffers(){
-
-		Offer res = controller.deactivateOffer(0);
-		assertThat(offer1).isEqualTo(res);
-
-		List<Offer> inactiveOffersRes = controller.getInactiveOffers();
-
-		assertTrue(1 == inactiveOffersRes.size() && inactiveOffersRes.contains(offer1));
-
-		List<Offer> activeOffersRes = controller.getActiveOffers();
-		assertTrue(2 == activeOffersRes.size() && activeOffersRes.contains(offer2) && activeOffersRes.contains(offer3));
-	}
-
-	@Test(expected = OfferIndexNotFoundException.class)
-	public void testDeactivateOffer_atIndex_3_inActiveOffers_return_exception(){
-		controller.deactivateOffer(3);
-	}
 
 
 
 	@Test
-	public void testActivateOffer_atIndex_0_inInactiveOffers(){
-		controller.deactivateOffer(0);
-
-		Offer res = controller.activateOffer(0);
-		assertThat(offer1).isEqualTo(res);
-
-		List<Offer> inactiveOffersRes = controller.getInactiveOffers();
-		assertEquals(0, inactiveOffersRes.size());
-
-		List<Offer> activeOffersRes = controller.getActiveOffers();
-		assertTrue(3 == activeOffersRes.size()
-			&& activeOffersRes.contains(offer1)
-			&& activeOffersRes.contains(offer2)
-			&& activeOffersRes.contains(offer3));
+	public void testDisplayBundleOffers() throws Exception {
+		String json = mapper.writeValueAsString(offer3);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active/bundle").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string("[" + json + "]"));
 	}
 
-	@Test(expected = OfferIndexNotFoundException.class)
-	public void testActivateOffer_atIndex_0_inInactiveOffers_while_no_offer_inactive_return_exception(){
-		controller.activateOffer(0);
+
+
+
+	@Test
+	public void testDeactivateOffer_atIndex_0_inActiveOffers() throws Exception {
+		String json = mapper.writeValueAsString(offer1);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/deactivate/0")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
+
+		List<Offer> expected = Arrays.asList(offer2,offer3);
+		json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
+
+		json = mapper.writeValueAsString(offer1);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/inactive").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string("[" + json + "]"));
+	}
+
+	@Test
+	public void testDeactivateOffer_atIndex_3_inActiveOffers_return_exception() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/deactivate/3")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is(404));
+	}
+
+
+
+	@Test
+	public void testActivateOffer_atIndex_0_inInactiveOffers() throws Exception {
+		testDeactivateOffer_atIndex_0_inActiveOffers();
+
+		String json = mapper.writeValueAsString(offer1);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/activate/0")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
+
+		List<Offer> expected = Arrays.asList(offer2,offer3,offer1);
+		json = mapper.writeValueAsString(expected);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/active").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
+
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/inactive").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string("[]"));
+	}
+
+	@Test
+	public void testActivateOffer_atIndex_0_inInactiveOffers_while_no_offer_inactive_return_exception() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/activate/0")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is(404));
 	}
 
 }
