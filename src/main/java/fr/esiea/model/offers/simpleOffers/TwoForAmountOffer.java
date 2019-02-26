@@ -11,20 +11,15 @@ import fr.esiea.model.offers.OfferType;
 
 import java.util.*;
 
-public class TwoForAmountOffer implements Offer {
+public class TwoForAmountOffer extends SimpleOffers {
 
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.TwoForAmount;
-	@JsonProperty("Product")
-	public final String product;
-	@JsonProperty("Argument")
-	private final double argument;
 	private Discount discount;
 
 
 	public TwoForAmountOffer(String product, double argument) {
-		this.argument = argument;
-		this.product = product;
+		super(product, argument);
 	}
 
 	@Override

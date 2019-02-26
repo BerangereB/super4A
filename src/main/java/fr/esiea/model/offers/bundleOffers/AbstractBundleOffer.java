@@ -1,15 +1,24 @@
 package fr.esiea.model.offers.bundleOffers;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.market.SupermarketCatalog;
-
+import fr.esiea.model.offers.Offer;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-class AbstractBundleOffer {
+public abstract class AbstractBundleOffer implements Offer {
+	@JsonProperty("Products")
+	protected final List<ProductQuantity> products;
+	@JsonProperty("Argument")
+	protected final double argument;
 
+	public AbstractBundleOffer(List<ProductQuantity> products, double argument) {
+		this.products = products;
+		this.argument = argument;
+	}
 
 	int getNumberOfPacks(List<ProductQuantity> products, Map<String, Double> items){
 

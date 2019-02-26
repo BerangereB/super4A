@@ -14,17 +14,15 @@ import java.util.*;
 /**
  * Cette offre s'applique sur un produit : 3 pour le prix de 2
  */
-public class ThreeForTwoOffer implements Offer {
+public class ThreeForTwoOffer extends SimpleOffers {
 
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.ThreeForTwo;
-	@JsonProperty("Product")
-	public final String product;
 	private Discount discount = null;
 
 
 	public ThreeForTwoOffer(String product) {
-		this.product = product;
+		super(product);
 	}
 
 	@Override

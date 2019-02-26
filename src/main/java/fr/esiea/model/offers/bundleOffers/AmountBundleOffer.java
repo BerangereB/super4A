@@ -19,25 +19,17 @@ import java.util.stream.Collectors;
  * Cette offre s'applique sur un ensemble de produits
  * Ce lot est au prix de 'argument'€
  */
-public class AmountBundleOffer extends AbstractBundleOffer implements Offer {
+public class AmountBundleOffer extends AbstractBundleOffer {
 
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.AmountBundle;
-
-	@JsonProperty("Products")
-	private final List<ProductQuantity> products;
-
-	@JsonProperty("Argument")
-	private final double argument;
 	private Discount discount = null;
 
 	// TODO: refactor Map<String,Integer> products -> Product/ProductQuantity
 	public AmountBundleOffer(List<ProductQuantity> products, double argument) {
-		this.argument = argument;
-		this.products = products;
+		super(products, argument);
 	}
-
-
+	
 	@Override
 	public List<ProductQuantity> getProducts() {
 		return products;

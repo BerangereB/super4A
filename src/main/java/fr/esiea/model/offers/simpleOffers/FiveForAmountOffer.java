@@ -14,22 +14,14 @@ import java.util.*;
  * Cette offre s'applique sur un produit
  * 5 unités de ce produit au prix de 'argument'€
  */
-public class FiveForAmountOffer implements Offer {
+public class FiveForAmountOffer extends SimpleOffers {
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.FiveForAmount;
-
-	@JsonProperty("Product")
-	public final String product;
-
-	@JsonProperty("Argument")
-	private final double argument;
 	private Discount discount = null;
 
 
-
 	public FiveForAmountOffer(String product, double argument) {
-		this.argument = argument;
-		this.product = product;
+		super(product, argument);
 	}
 
 

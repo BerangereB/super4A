@@ -14,21 +14,14 @@ import java.util.*;
 /**
  * Offre qui applique une réduction de argument%
  */
-public class PercentOffer implements Offer {
+public class PercentOffer extends SimpleOffers {
 
 	@JsonProperty("Type")
 	private final OfferType type = OfferType.Percent;
-	@JsonProperty("Product")
-	public final String product;
-	@JsonProperty("Argument")
-	private final double argument;
 	private Discount discount = null;
 
-
-
 	public PercentOffer(String product, double argument) {
-		this.argument = argument;
-		this.product = product;
+		super(product, argument);
 	}
 
 	@JsonIgnore
