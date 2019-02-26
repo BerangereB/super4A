@@ -9,25 +9,27 @@ import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
 import fr.esiea.web.controllers.OffersController;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class OffersControllerTest {
 
@@ -44,12 +46,12 @@ public class OffersControllerTest {
 	@Autowired
 	private OffersController controller;
 
-	@Before
+	@BeforeEach
 	public void setUp(){
 		controller.service.reset();
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void initOffers(){
 		SimpleOfferFactory simpleOfferFactory = new SimpleOfferFactory();
 		BundleOfferFactory bundleOfferFactory = new BundleOfferFactory();

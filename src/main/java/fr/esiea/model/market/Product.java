@@ -13,6 +13,8 @@ public class Product {
 	@JsonProperty("Price")
 	private double price;
 
+	public Product(){}
+
 	public Product(String name, ProductUnit unit,double price) {
 		this.name = name.toLowerCase();
 		this.unit = unit;
