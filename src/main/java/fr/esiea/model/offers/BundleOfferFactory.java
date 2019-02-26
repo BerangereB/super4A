@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BundleOfferFactory {
 
-	public static Offer getOffer(OfferType type, List<ProductQuantity> products, double argument){
+	public Offer getOffer(OfferType type, List<ProductQuantity> products, double argument){
 		switch (type){
 			case PercentBundle:
 				return new PercentBundleOffer(products,argument);

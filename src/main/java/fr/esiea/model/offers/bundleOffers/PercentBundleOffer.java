@@ -8,6 +8,7 @@ import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.SupermarketCatalog;
 import fr.esiea.model.offers.OfferType;
+import fr.esiea.model.offers.simpleOffers.FiveForAmountOffer;
 
 import java.util.List;
 import java.util.Map;
@@ -71,22 +72,7 @@ public class PercentBundleOffer extends AbstractBundleOffer {
 		return items;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		PercentBundleOffer offer = (PercentBundleOffer) o;
-		return Objects.equals(type, offer.type) &&
-			argument == offer.argument &&
-			discount == offer.discount &&
-			Objects.equals(products,offer.products);
-	}
 
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(type,argument,discount,products);
-	}
 
 }
 

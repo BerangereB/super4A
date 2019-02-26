@@ -3,6 +3,7 @@ package fr.esiea.model.offers.simpleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
@@ -55,23 +56,6 @@ public class ThreeForTwoOffer extends SimpleOffers {
 	@Override
 	public Discount getDiscount() {
 		return discount;
-	}
-
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ThreeForTwoOffer offer = (ThreeForTwoOffer) o;
-		return Objects.equals(type, offer.type) &&
-			discount == offer.discount &&
-			Objects.equals(product,offer.product);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(type,discount,product);
 	}
 
 }

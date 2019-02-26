@@ -56,21 +56,4 @@ public class TwoForAmountOffer extends SimpleOffers {
 		return discount;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		TwoForAmountOffer offer = (TwoForAmountOffer) o;
-		return Objects.equals(type, offer.type) &&
-			argument == offer.argument &&
-			discount == offer.discount &&
-			Objects.equals(product,offer.product);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(type,argument,discount,product);
-	}
-
 }

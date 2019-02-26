@@ -2,9 +2,9 @@ package fr.esiea.model;
 
 import fr.esiea.model.market.*;
 import fr.esiea.model.offers.BundleOfferFactory;
+import fr.esiea.model.offers.SimpleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
-import fr.esiea.model.offers.SimpleOfferFactory;
 import fr.esiea.model.marketReceipt.Receipt;
 import fr.esiea.model.marketReceipt.ReceiptPrinter;
 import fr.esiea.model.marketReceipt.ShoppingCart;
@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 class SupermarketTest {
 	private SupermarketCatalog catalog;
 	private Teller teller;
+	private final BundleOfferFactory bundleFactory = new BundleOfferFactory();
+	private final SimpleOfferFactory simpleFactory = new SimpleOfferFactory();
 
 	@BeforeEach
 	void beforeAll(){
@@ -37,7 +39,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 		cart.addItemQuantity(apples.getName(), 2.5);
 
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.Percent,toothbrush.getName(), 10.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.Percent,toothbrush.getName(), 10.0));
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		Double current = receipt.getTotalPrice();
@@ -59,7 +61,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 		cart.addItemQuantity(toothbrush.getName(), quantity);
 
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.TwoForAmount,toothbrush.getName(), unitToothbrushPrice));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.TwoForAmount,toothbrush.getName(), unitToothbrushPrice));
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
 		Double current = receipt.getTotalPrice();
@@ -78,7 +80,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush);
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
 		cart.addItemQuantity(toothbrush.getName(), quantity);
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
@@ -96,7 +98,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush);
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount,toothbrush.getName(), 0.99));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.FiveForAmount,toothbrush.getName(), 0.99));
 		cart.addItemQuantity(toothbrush.getName(), quantity);
 		cart.addItemQuantity(toothbrush.getName(), 1);
 
@@ -115,7 +117,7 @@ class SupermarketTest {
 		ShoppingCart cart = new ShoppingCart();
 
 		catalog.addProduct(toothbrush);
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.Percent,toothbrush.getName(), 20));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.Percent,toothbrush.getName(), 20));
 		cart.addItem(toothbrush.getName());
 
 		Receipt receipt = teller.checksOutArticlesFrom(cart);
@@ -140,7 +142,7 @@ class SupermarketTest {
 
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(apples);
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount,toothbrush.getName(), 0.99));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.FiveForAmount,toothbrush.getName(), 0.99));
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
 		cart.addItemQuantity(toothbrush.getName(), 1);
 
@@ -169,7 +171,7 @@ class SupermarketTest {
 
 		catalog.addProduct(toothbrush);
 		catalog.addProduct(apples);
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
 		cart.addItemQuantity(toothbrush.getName(), quantity);
 		cart.addItemQuantity(apples.getName(), 1);
 
@@ -204,9 +206,9 @@ class SupermarketTest {
 		catalog.addProduct(spoon);
 		catalog.addProduct(avocado);
 
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.TwoForAmount,toothbrush.getName(), 1.5));
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,spoon.getName(),0.0));
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount,avocado.getName(), 5.5));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.TwoForAmount,toothbrush.getName(), 1.5));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.ThreeForTwo,spoon.getName(),0.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.FiveForAmount,avocado.getName(), 5.5));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
 		cart.addItemQuantity(spoon.getName(), spoon_quantity);
@@ -243,7 +245,7 @@ class SupermarketTest {
 		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
 		products.add(new ProductQuantity(toothbrush.getName(),2));
 		products.add(new ProductQuantity(toothpaste.getName(),1));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.AmountBundle,products,amount));
+		teller.addSpecialOffer(bundleFactory.getOffer(OfferType.AmountBundle,products,amount));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
 		cart.addItemQuantity(toothpaste.getName(),toothpaste_quantity);
@@ -279,7 +281,7 @@ class SupermarketTest {
 		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
 		products.add(new ProductQuantity(toothbrush.getName(),2));
 		products.add(new ProductQuantity(toothpaste.getName(),1));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
+		teller.addSpecialOffer(bundleFactory.getOffer(OfferType.PercentBundle,products,percentage));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
 		cart.addItemQuantity(toothpaste.getName(),toothpaste_quantity);
@@ -314,10 +316,10 @@ class SupermarketTest {
 		List<ProductQuantity> products = new ArrayList<ProductQuantity>();
 		products.add(new ProductQuantity(toothbrush.getName(),2));
 		products.add(new ProductQuantity(toothpaste.getName(),1));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
+		teller.addSpecialOffer(bundleFactory.getOffer(OfferType.PercentBundle,products,percentage));
 
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo,toothpaste.getName(),0.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.ThreeForTwo,toothbrush.getName(),0.0));
+		teller.addSpecialOffer(simpleFactory.getOffer(OfferType.ThreeForTwo,toothpaste.getName(),0.0));
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
 		cart.addItemQuantity(toothpaste.getName(),toothpaste_quantity);
@@ -356,8 +358,8 @@ class SupermarketTest {
 		products.add(new ProductQuantity(toothbrush.getName(),2));
 		products.add(new ProductQuantity(toothpaste.getName(),1));
 
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,products,percentage));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.AmountBundle,products,amount));
+		teller.addSpecialOffer(bundleFactory.getOffer(OfferType.PercentBundle,products,percentage));
+		teller.addSpecialOffer(bundleFactory.getOffer(OfferType.AmountBundle,products,amount));
 
 
 		cart.addItemQuantity(toothbrush.getName(), toothbrush_quantity);
@@ -373,7 +375,7 @@ class SupermarketTest {
 
 	@Test
 	public void testRemoveOfferInTeller(){
-		Offer o = SimpleOfferFactory.getOffer(OfferType.TwoForAmount,"toothbrush", 1.5);
+		Offer o = simpleFactory.getOffer(OfferType.TwoForAmount,"toothbrush", 1.5);
 		teller.addSpecialOffer(o);
 		teller.removeOffer(o);
 		assertThat(teller.getOffers()).doesNotContain(o);

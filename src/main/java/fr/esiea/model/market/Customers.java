@@ -5,6 +5,7 @@ package fr.esiea.model.market;
  * @project super4A - fr.esiea.model.market
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.marketReceipt.ShoppingCart;
 import java.util.HashMap;
 import java.util.Map;

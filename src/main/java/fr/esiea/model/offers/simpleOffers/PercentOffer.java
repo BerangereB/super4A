@@ -49,23 +49,4 @@ public class PercentOffer extends SimpleOffers {
 		return productQuantities;
 	}
 
-
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		PercentOffer offer = (PercentOffer) o;
-		return Objects.equals(type, offer.type) &&
-			argument == offer.argument &&
-			discount == offer.discount &&
-			Objects.equals(product,offer.product);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(type,argument,discount,product);
-	}
-
 }

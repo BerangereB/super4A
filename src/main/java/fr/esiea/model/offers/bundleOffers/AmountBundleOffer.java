@@ -2,6 +2,7 @@ package fr.esiea.model.offers.bundleOffers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductQuantity;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
@@ -10,7 +11,6 @@ import fr.esiea.model.offers.OfferType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -77,23 +77,5 @@ public class AmountBundleOffer extends AbstractBundleOffer {
 		return items;
 	}
 
-
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		AmountBundleOffer offer = (AmountBundleOffer) o;
-		return Objects.equals(type, offer.type) &&
-			argument == offer.argument &&
-			discount == offer.discount &&
-			Objects.equals(products,offer.products);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(type,argument,discount,products);
-	}
 
 }
