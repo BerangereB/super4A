@@ -3,6 +3,7 @@ package fr.esiea.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
+import fr.esiea.web.controllers.ProductController;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;

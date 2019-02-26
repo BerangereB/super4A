@@ -19,7 +19,7 @@ public class SupermarketService {
 	private Teller teller;
 	private List<Offer> inactiveOffers;
 
-	SupermarketService(){
+	public SupermarketService(){
 		reset();
 	}
 
@@ -107,6 +107,9 @@ public class SupermarketService {
 
 
 	public void reset(){
+		BundleOfferFactory bundleOfferFactory = new BundleOfferFactory();
+		SimpleOfferFactory simpleOfferFactory = new SimpleOfferFactory();
+
 		inactiveOffers = new ArrayList<Offer>();
 		catalog = new SimpleSupermarketCatalog();
 		teller = new Teller(catalog);
@@ -115,9 +118,9 @@ public class SupermarketService {
 		productsBundle.add(new ProductQuantity("toothbrush",2));
 		productsBundle.add(new ProductQuantity("toothpaste",2));
 
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, "toothbrush", 0.0));
-		teller.addSpecialOffer(SimpleOfferFactory.getOffer(OfferType.FiveForAmount, "toothpaste", 2.5));
-		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20));
+		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.ThreeForTwo, "toothbrush", 0.0));
+		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.FiveForAmount, "toothpaste", 2.5));
+		teller.addSpecialOffer(bundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20));
 	}
 
 	public Map<Integer, ShoppingCart> getCustomers() {

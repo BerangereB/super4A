@@ -1,6 +1,7 @@
-package fr.esiea.web;
+package fr.esiea.web.controllers;
 
 import fr.esiea.model.offers.Offer;
+import fr.esiea.web.SupermarketService;
 import fr.esiea.web.exceptions.OfferIndexNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import java.util.List;
 @RestController
 public class OffersController {
 
-	SupermarketService service = new SupermarketService();
+	public SupermarketService service = new SupermarketService();
 
 	@GetMapping(value="active", produces = "application/json")
 	public List<Offer> getActiveOffers(){

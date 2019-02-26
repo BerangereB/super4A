@@ -1,6 +1,7 @@
-package fr.esiea.web;
+package fr.esiea.web.controllers;
 
 import fr.esiea.model.market.Product;
+import fr.esiea.web.SupermarketService;
 import fr.esiea.web.exceptions.ProductNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-	SupermarketService service = new SupermarketService();
+	public SupermarketService service = new SupermarketService();
 
 	@GetMapping(value = "/supermarket/products", produces = "application/json")
 	public List<Product> getProducts() {

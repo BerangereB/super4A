@@ -8,6 +8,7 @@ import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
+import fr.esiea.web.controllers.OffersController;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
@@ -50,15 +51,18 @@ public class OffersControllerTest {
 
 	@BeforeClass
 	public static void initOffers(){
+		SimpleOfferFactory simpleOfferFactory = new SimpleOfferFactory();
+		BundleOfferFactory bundleOfferFactory = new BundleOfferFactory();
+
 		Product toothbrush = new Product("toothbrush", ProductUnit.Each,0.99);
 		Product toothpaste = new Product("Toothpaste", ProductUnit.Each,0.89);
 		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
 		productsBundle.add(new ProductQuantity(toothbrush.getName(),2));
 		productsBundle.add(new ProductQuantity(toothpaste.getName(),2));
 
-		offer1 = SimpleOfferFactory.getOffer(OfferType.ThreeForTwo, toothbrush.getName(), 0.0);
-		offer2 = SimpleOfferFactory.getOffer(OfferType.FiveForAmount, toothpaste.getName(), 2.5);
-		offer3 = BundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20);
+		offer1 = simpleOfferFactory.getOffer(OfferType.ThreeForTwo, toothbrush.getName(), 0.0);
+		offer2 = simpleOfferFactory.getOffer(OfferType.FiveForAmount, toothpaste.getName(), 2.5);
+		offer3 = bundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20);
 
 	}
 

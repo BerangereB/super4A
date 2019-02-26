@@ -1,9 +1,10 @@
-package fr.esiea.web;
+package fr.esiea.web.controllers;
 
 import fr.esiea.model.market.Product;
 import fr.esiea.model.marketReceipt.Receipt;
 import fr.esiea.model.marketReceipt.ReceiptPrinter;
 import fr.esiea.model.marketReceipt.ShoppingCart;
+import fr.esiea.web.SupermarketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

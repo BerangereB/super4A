@@ -3,8 +3,6 @@ package fr.esiea.model.market;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
-
 
 public class Product {
 
@@ -14,8 +12,6 @@ public class Product {
 	private ProductUnit unit;
 	@JsonProperty("Price")
 	private double price;
-
-	public Product() {}
 
 	public Product(String name, ProductUnit unit,double price) {
 		this.name = name.toLowerCase();
