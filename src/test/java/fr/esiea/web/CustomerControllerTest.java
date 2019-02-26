@@ -32,9 +32,6 @@ public class CustomerControllerTest {
 	@Autowired
 	private MockMvc mvc;
 
-	@Autowired
-	private CustomerController controller;
-
 	@BeforeClass
 	public static void init(){
 		cart1 = new ShoppingCart();
@@ -46,10 +43,6 @@ public class CustomerControllerTest {
 		cart2.addItemQuantity("bananas",2.5);
 	}
 
-	@Before
-	public void setUp(){
-		controller.service.reset();
-	}
 
 	@Test
 	public void testGetCustomers() throws Exception {
@@ -61,6 +54,58 @@ public class CustomerControllerTest {
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().string(json));
+	}
+
+	@Test
+	public void testGetCustomer1() throws Exception {
+		String json = mapper.writeValueAsString(cart1);
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/1")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(json));
+	}
+
+	@Test
+	public void testGetCustomer0() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/0")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is(404));
+	}
+
+	@Test
+	public void testGetCustomer1Receipt() throws Exception {
+		String expected = "2.87";
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/receipt/1")
+			.accept(MediaType.TEXT_PLAIN))
+			.andExpect(status().isOk())
+			.andExpect(content().string(expected));
+	}
+
+	@Test
+	public void testGetCustomer0Receipt() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/receipt/0")
+			.accept(MediaType.TEXT_PLAIN))
+			.andExpect(status().is(404));
+	}
+
+	@Test
+	public void testGetCustomer1PrintedReceipt() throws Exception {
+		String expected = "toothbrush                          1.98\n" +
+			"  0.99 * 2\n" +
+			"toothpaste                          0.89\n" +
+			"\n" +
+			"Total:                              2.87";
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/printedReceipt/1")
+			.accept(MediaType.TEXT_PLAIN))
+			.andExpect(status().isOk())
+			.andExpect(content().string(expected));
+	}
+
+	@Test
+	public void testGetCustomer0PrintedReceipt() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/printedReceipt/0")
+			.accept(MediaType.TEXT_PLAIN))
+			.andExpect(status().is(404));
 	}
 
 }
