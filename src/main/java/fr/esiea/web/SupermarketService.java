@@ -1,6 +1,7 @@
 package fr.esiea.web;
 
 import fr.esiea.model.market.*;
+import fr.esiea.model.marketReceipt.ShoppingCart;
 import fr.esiea.model.marketReceipt.Teller;
 import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
@@ -14,7 +15,7 @@ public class SupermarketService {
 	private static SupermarketCatalog catalog;
 	private static Teller teller;
 	private static List<Offer> inactiveOffers;
-
+	private static Customers clients;
 	static{
 		reset();
 	}
@@ -23,7 +24,6 @@ public class SupermarketService {
 		return catalog;
 	}
 
-
 	public static Product getProduct(String name) {
 		return catalog.getProducts().get(name);
 	}
@@ -31,9 +31,6 @@ public class SupermarketService {
 	public static List<Product> getProducts() {
 		return new ArrayList<Product>(catalog.getProducts().values());
 	}
-
-
-
 
 	public static List<Offer> getActiveOffers(String type ) {
 		List<Offer> res = teller.getOffers();
@@ -110,6 +107,22 @@ public class SupermarketService {
 		teller.addSpecialOffer(BundleOfferFactory.getOffer(OfferType.PercentBundle,
 			productsBundle,
 			20));
+
+		//init Customer
+		clients = Customers.INSTANCE;
+
+		//init customers shopping cart
+		ShoppingCart cart1 = new ShoppingCart();
+		cart1.addItemQuantity(apples.getName(), 2.5);
+
+		ShoppingCart cart2 = new ShoppingCart();
+		cart2.addItemQuantity(toothbrush.getName(), 1);
+		cart2.addItemQuantity(toothpaste.getName(), 1);
+
+		clients.createCustomer(cart1);
+		clients.createCustomer(cart2);
+
+
 	}
 
 	public static Product removeProduct(String name) {
@@ -129,5 +142,23 @@ public class SupermarketService {
 			return null;
 		}
 
+	}
+
+	public static Map<Integer, ShoppingCart> getCustomers(){
+		return clients.getCustomers();
+	}
+
+	public static ShoppingCart getCustomerById(final int id){
+		return clients.getShoppingCartById(id);
+	}
+
+	//does not handle quantity ^^' TODO: handle quantity
+	public static boolean addProductToCart(final int id, final String p){
+		try {
+			clients.addProductToShoppingCart(id, p);
+			return true;
+		} catch (Exception e){
+			return false;
+		}
 	}
 }

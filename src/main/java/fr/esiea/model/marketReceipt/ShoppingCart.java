@@ -1,5 +1,6 @@
 package fr.esiea.model.marketReceipt;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.market.Discount;
 import fr.esiea.model.market.ProductQuantity;
@@ -73,4 +74,6 @@ public class ShoppingCart {
 
 		}
 	}
+
+
 }

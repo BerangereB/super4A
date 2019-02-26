@@ -24,7 +24,7 @@ public class ProductController {
 		}
 	}
 
-	@PostMapping(value = "/supermarket/products/add", produces = "application/json")
+	@PostMapping(value = "/supermarket/products/", produces = "application/json")
 	public Product addProduct(@RequestBody Product newProduct){
 		return SupermarketService.addProduct(newProduct);
 
