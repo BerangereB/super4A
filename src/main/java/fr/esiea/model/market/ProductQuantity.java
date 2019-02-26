@@ -1,9 +1,12 @@
 package fr.esiea.model.market;
 
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductQuantity {
+	@JsonProperty("Product")
 	private final String product;
+	@JsonProperty("Quantity")
 	private final double quantity;
 
 	public ProductQuantity(String product, double weight) {
@@ -19,19 +22,4 @@ public class ProductQuantity {
 		return quantity;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ProductQuantity pq = (ProductQuantity) o;
-		return Objects.equals(product, pq.product) &&
-			quantity == pq.quantity;
-
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(product,quantity);
-	}
 }

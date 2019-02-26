@@ -6,7 +6,7 @@ import fr.esiea.model.offers.bundleOffers.PercentBundleOffer;
 
 import java.util.List;
 
-public class BundleOfferFactory {
+public final class BundleOfferFactory {
 
 	public static Offer getOffer(OfferType type, List<ProductQuantity> products, double argument){
 		switch (type){

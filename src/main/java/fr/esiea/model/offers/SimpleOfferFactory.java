@@ -5,7 +5,7 @@ import fr.esiea.model.offers.simpleOffers.PercentOffer;
 import fr.esiea.model.offers.simpleOffers.ThreeForTwoOffer;
 import fr.esiea.model.offers.simpleOffers.TwoForAmountOffer;
 
-public class SimpleOfferFactory {
+public final class SimpleOfferFactory {
 	public static Offer getOffer(OfferType type, String p, double argument){
 		switch (type){
 			case Percent:
