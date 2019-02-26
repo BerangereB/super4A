@@ -29,7 +29,7 @@ public class AmountBundleOffer extends AbstractBundleOffer {
 	public AmountBundleOffer(List<ProductQuantity> products, double argument) {
 		super(products, argument);
 	}
-	
+
 	@Override
 	public List<ProductQuantity> getProducts() {
 		return products;
