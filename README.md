@@ -1,8 +1,8 @@
 # Super4A - ReadMe 
 
-[![Build Status](https://travis-ci.com/BerangereB/super4A.svg?token=bPhwiywrTeut7vVkZf6B&branch=master)](https://travis-ci.com/BerangereB/super4A) [![codecov](https://codecov.io/gh/BerangereB/super4A/branch/master/graph/badge.svg)](https://codecov.io/gh/BerangereB/super4A)
+[![Build Status](https://travis-ci.com/BerangereB/super4A.svg?token=bPhwiywrTeut7vVkZf6B&branch=master)](https://travis-ci.com/BerangereB/super4A) [![codecov](https://codecov.io/gh/BerangereB/super4A/branch/master/graph/badge.svg?token=QG04UsCMBK)](https://codecov.io/gh/BerangereB/super4A)
 
-
+NB. La couverture réelle est de 99% (Intellij).Travis rencontrant des problèmes avec la version 2.0.0 de SpringBoot, les tests d'intégrations ne sont pas présents dans le rapport de couverture de code de CodeCov
 ## Project team members
 
 - BOURDOULOUS Bérangère (BerangereB)

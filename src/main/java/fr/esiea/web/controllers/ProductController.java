@@ -14,7 +14,6 @@ import java.util.List;
 public class ProductController {
 
 	public SupermarketService service = SupermarketService.INSTANCE;
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	@GetMapping(value = "", produces = "application/json")
 	public List<Product> getProducts() {
