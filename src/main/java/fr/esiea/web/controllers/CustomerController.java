@@ -51,7 +51,7 @@ public class CustomerController {
 	}
 
 	// To perfect
-	@DeleteMapping(value = "/remove/{id}", produces = "application/json", consumes = "application/json")
+	@DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
 	public ProductQuantity removeProductToCart(@PathVariable final int id, @RequestBody ProductQuantity pq) {
 		boolean res = service.removeProductToCart(id, pq);
 		if(res){
@@ -62,7 +62,7 @@ public class CustomerController {
 	}
 
 
-	@GetMapping(value = "/receipt/{id}", produces = "text/plain")
+	@GetMapping(value = "/{id}/receipt", produces = "text/plain")
 	public String getReceipt(@PathVariable final int id) {
 		Receipt receipt = service.getCustomerReceipt(id);
 		if(receipt != null){
@@ -72,7 +72,7 @@ public class CustomerController {
 		}
 	}
 
-	@GetMapping(value = "/printedReceipt/{id}", produces = "text/plain")
+	@GetMapping(value = "/{id}/printedReceipt", produces = "text/plain")
 	public String getPrintedReceipt(@PathVariable final int id) {
 		String receipt = service.getCustomerPrintedReceipt(id);
 		if(receipt != null){

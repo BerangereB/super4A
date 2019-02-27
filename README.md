@@ -41,8 +41,11 @@ It means the server failed to fulfill an apparently valid request.
 
 - display products : ``` GET /supermarket/products```
 - display a specific product with its name : ``` GET /supermarket/products/{name}```
-- add product to the catalog : ``` POST /supermarket/products/add```
-- remove a product by its name : ``` DELETE /supermarket/products/remove/{name}```
+- add product to the catalog (update if already exists): ``` POST /supermarket/products```
+
+	_With a RequestBody like :_
+	```{"Name": "toothbrush","Unit": "Each","Price": 0.99}```
+- remove a product by its name : ``` DELETE /supermarket/products/{name}```
 
 #### OFFERS
 
@@ -58,11 +61,14 @@ It means the server failed to fulfill an apparently valid request.
 
 - display customers' shopping cart: ```GET /supermarket/customers```
 - display specific customer's shopping cart by Id : ```GET /supermarket/customers/{id}```
-- add product in a customer's shopping cart : ```POST /supermarket/customers/{id}/add/{product}/{quantity}```
-- remove product in a customer's shopping cart : ```DELETE /supermarket/customers/{id}/remove/{product}/{quantity}```
+- add product in a customer's shopping cart : ```POST /supermarket/customers/{id}```
 
-- checkout articles from a specific shopping cart => display totalPrice: ```GET /supermarket/customers/{id}/checkout/totalPrice```
-- checkout articles from a specific shopping cart => display Receipt : ```GET /supermarket/customers/{id}/checkout/receipt```
+	_With a RequestBody like :_
+	```{"Product": "toothbrush","Quantity": 2}```
+- remove product in a customer's shopping cart : ```DELETE /supermarket/customers/{id}```
+
+- checkout articles from a specific shopping cart => display totalPrice: ```GET /supermarket/customers/{id}/receipt```
+- checkout articles from a specific shopping cart => display Receipt : ```GET /supermarket/customers/{id}/printedReceipt```
 
 
 ## Useful links

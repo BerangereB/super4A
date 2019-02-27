@@ -9,9 +9,10 @@ import fr.esiea.model.offers.BundleOfferFactory;
 import fr.esiea.model.offers.Offer;
 import fr.esiea.model.offers.OfferType;
 import fr.esiea.model.offers.SimpleOfferFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum SupermarketService {
@@ -61,15 +62,9 @@ public enum SupermarketService {
 		return p;
 	}
 
-	public Product addProduct(Product p) {
+	public void addProduct(Product p) {
 		boolean exists = catalog.getProducts().get(p.getName()) != null;
-		if(!exists){
-			catalog.addProduct(p);
-			return p;
-		}else{
-			return null;
-		}
-
+		catalog.addProduct(p);
 	}
 
 
