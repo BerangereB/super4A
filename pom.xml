@@ -10,7 +10,7 @@
 
 	<properties>
 		<junit.version>5.3.2</junit.version>
-		<spring.version>1.5.10.RELEASE</spring.version>
+		<spring.version>2.0.0.RELEASE</spring.version>
 	</properties>
 
 
@@ -60,6 +60,12 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>[2.9.8,)</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>16.0.2</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -69,6 +75,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.version}</version>
 			</plugin>
 
 			<plugin>

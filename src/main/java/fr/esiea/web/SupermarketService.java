@@ -76,7 +76,7 @@ public enum SupermarketService {
 			case "simple":
 				res = res
 					.stream()
-					.filter(x->x.getProducts().size() == 1)
+					.filter(x -> x.getProducts().size() == 1)
 					.collect(Collectors.toList());
 				break;
 			case "bundle":

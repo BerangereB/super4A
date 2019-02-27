@@ -4,15 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
 import fr.esiea.web.controllers.ProductController;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -22,7 +22,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class ProductControllerTest {
@@ -41,13 +41,13 @@ public class ProductControllerTest {
 	@Autowired
 	private ProductController controller;
 
-	@Before
+	@BeforeEach
 	public void setUp(){
 		controller.service.reset();
 	}
 
 
-	@BeforeClass
+	@BeforeAll
 	public static void initProducts(){
 		toothbrush = new Product("toothbrush", ProductUnit.Each,0.99);
 		toothpaste = new Product("toothpaste", ProductUnit.Each,0.89);
@@ -101,7 +101,7 @@ public class ProductControllerTest {
 	@Test
 	public void testRemoveToothpasteFromCatalog() throws Exception {
 		String json = mapper.writeValueAsString(toothpaste);
-		mvc.perform(MockMvcRequestBuilders.delete(URL + "/remove/toothpaste")
+		mvc.perform(MockMvcRequestBuilders.delete(URL + "/toothpaste")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().string(json));
@@ -115,7 +115,7 @@ public class ProductControllerTest {
 
 	@Test
 	public void testRemoveSpoonFromCatalog_error_expected() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.delete(URL + "/remove/spoon")
+		mvc.perform(MockMvcRequestBuilders.delete(URL + "/spoon")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().is(404));
 	}
