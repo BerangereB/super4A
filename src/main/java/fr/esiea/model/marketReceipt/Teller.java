@@ -26,10 +26,10 @@ public class Teller {
 
 	public Receipt checksOutArticlesFrom(ShoppingCart theCart) {
 		Receipt receipt = new Receipt();
-		List<ProductQuantity> productQuantities = theCart.getItems();
-		for (ProductQuantity pq: productQuantities) {
-			String p = pq.getProduct();
-			double quantity = pq.getQuantity();
+		Map<String,Double> productQuantities = theCart.productQuantities();
+		for (Map.Entry<String,Double> pq: productQuantities.entrySet()) {
+			String p = pq.getKey();
+			double quantity = pq.getValue();
 			double unitPrice = this.catalog.getUnitPrice(p);
 			double price = quantity * unitPrice;
 			receipt.addProduct(p,catalog.getProducts().get(p).getUnit(), quantity, unitPrice, price);

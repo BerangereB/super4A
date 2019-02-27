@@ -14,14 +14,9 @@ import java.util.Map;
 
 public class ShoppingCart {
 
-	@JsonIgnore
-	private final ArrayList<ProductQuantity> items = new ArrayList<ProductQuantity>();
 	@JsonProperty("Products")
 	private Map<String, Double> productQuantities = new LinkedHashMap<String,Double>();
 
-	public List<ProductQuantity> getItems() {
-		return new ArrayList<ProductQuantity>(items);
-	}
 	public void addItem(String product) {
 		this.addItemQuantity(product, 1.0);
 	}
@@ -31,7 +26,6 @@ public class ShoppingCart {
 
 
 	public void addItemQuantity(String product, double quantity) {
-		items.add(new ProductQuantity(product, quantity));
 		if (productQuantities.containsKey(product)) {
 			productQuantities.put(product, productQuantities.get(product) + quantity);
 		} else {
@@ -41,7 +35,6 @@ public class ShoppingCart {
 
 
 	public void removeItemQuantity(String product, double quantity) {
-		items.remove(new ProductQuantity(product, quantity));
 		productQuantities.remove(product);
 	}
 
