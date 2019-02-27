@@ -10,13 +10,12 @@ import fr.esiea.model.marketReceipt.ShoppingCart;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum Customers {
-	INSTANCE;
+public class Customers {
 
 	private Map<Integer, ShoppingCart> customers;
-	private static int numberOfAccounts = 0;
+	private int numberOfAccounts = 0;
 
-	Customers() {
+	public Customers() {
 		customers = new LinkedHashMap<>();
 	}
 
@@ -54,7 +53,7 @@ public enum Customers {
 		return customers.get(customerID);
 	}
 
-	private static int getNewCustomerId() {
+	private int getNewCustomerId() {
 		return ++numberOfAccounts;
 	}
 }

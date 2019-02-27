@@ -16,33 +16,49 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum SupermarketService {
-	SERVICE;
+	INSTANCE;
 
-	private BundleOfferFactory bundleOfferFactory = new BundleOfferFactory();
-	private SimpleOfferFactory simpleOfferFactory = new SimpleOfferFactory();
 	private SupermarketCatalog catalog;
 	private Teller teller;
 	private List<Offer> inactiveOffers;
-	private Customers customers = Customers.INSTANCE;
+	private Customers customers;
 
-	SupermarketService(){
+	SupermarketService() {
 		reset();
+	}
+
+	public void reset() {
+		// catalog
+		catalog = new SimpleSupermarketCatalog();
+
+		// Teller -- offers
+		teller = new Teller(catalog);
+
+		inactiveOffers = new ArrayList<Offer>();
+
+		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
+		productsBundle.add(new ProductQuantity("toothbrush", 2));
+		productsBundle.add(new ProductQuantity("toothpaste", 2));
+
+		BundleOfferFactory bundleOfferFactory = new BundleOfferFactory();
+		SimpleOfferFactory simpleOfferFactory = new SimpleOfferFactory();
+		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.ThreeForTwo, "toothbrush", 0.0));
+		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.FiveForAmount, "toothpaste", 2.5));
+		teller.addSpecialOffer(bundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20));
+
 
 		// Shopping CART
+		customers = new Customers();
 		ShoppingCart cart = new ShoppingCart();
-		cart.addItemQuantity("toothbrush",2);
-		cart.addItemQuantity("toothpaste",1);
+		cart.addItemQuantity("toothbrush", 2);
+		cart.addItemQuantity("toothpaste", 1);
 
 		ShoppingCart cart2 = new ShoppingCart();
-		cart2.addItemQuantity("apples",2.15);
-		cart2.addItemQuantity("bananas",2.5);
+		cart2.addItemQuantity("apples", 2.15);
+		cart2.addItemQuantity("bananas", 2.5);
 
 		customers.createCustomer(cart);
 		customers.createCustomer(cart2);
-	}
-
-	public SupermarketCatalog getCatalog(){
-		return catalog;
 	}
 
 
@@ -152,30 +168,4 @@ public enum SupermarketService {
 		}
 		return null;
 	}
-
-
-
-
-
-
-	public void reset(){
-		// catalog
-		catalog = new SimpleSupermarketCatalog();
-
-		// Teller -- offers
-		teller = new Teller(catalog);
-
-		inactiveOffers = new ArrayList<Offer>();
-		List<ProductQuantity> productsBundle = new ArrayList<ProductQuantity>();
-		productsBundle.add(new ProductQuantity("toothbrush",2));
-		productsBundle.add(new ProductQuantity("toothpaste",2));
-
-		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.ThreeForTwo, "toothbrush", 0.0));
-		teller.addSpecialOffer(simpleOfferFactory.getOffer(OfferType.FiveForAmount, "toothpaste", 2.5));
-		teller.addSpecialOffer(bundleOfferFactory.getOffer(OfferType.PercentBundle, productsBundle, 20));
-
-
-	}
-
-
 }

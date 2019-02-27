@@ -3,16 +3,15 @@ package fr.esiea.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.esiea.model.market.Product;
 import fr.esiea.model.market.ProductUnit;
-import fr.esiea.web.controllers.ProductController;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -22,8 +21,8 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.MOCK)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class ProductControllerTest {
 
@@ -38,26 +37,23 @@ public class ProductControllerTest {
 	@Autowired
 	private MockMvc mvc;
 
-	@Autowired
-	private ProductController controller;
-
-	@BeforeEach
-	public void setUp(){
-		controller.service.reset();
+	@Before
+	public void reset() {
+		SupermarketService.INSTANCE.reset();
 	}
 
-
-	@BeforeAll
-	public static void initProducts(){
-		toothbrush = new Product("toothbrush", ProductUnit.Each,0.99);
-		toothpaste = new Product("toothpaste", ProductUnit.Each,0.89);
-		apples = new Product("apples", ProductUnit.Kilo,1.99);
-		bananas = new Product("bananas", ProductUnit.Kilo,2.99);
+	@BeforeClass
+	public static void initProducts() {
+		toothbrush = new Product("toothbrush", ProductUnit.Each, 0.99);
+		toothpaste = new Product("toothpaste", ProductUnit.Each, 0.89);
+		apples = new Product("apples", ProductUnit.Kilo, 1.99);
+		bananas = new Product("bananas", ProductUnit.Kilo, 2.99);
 	}
+
 	@Test
 	public void testDisplayProducts() throws Exception {
 
-		List<Product> expected = Arrays.asList(toothbrush,toothpaste,apples,bananas);
+		List<Product> expected = Arrays.asList(toothbrush, toothpaste, apples, bananas);
 
 		String json = mapper.writeValueAsString(expected);
 		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
@@ -80,10 +76,9 @@ public class ProductControllerTest {
 	}
 
 
-
 	@Test
 	public void testAddSpoonInCatalog() throws Exception {
-		Product spoon  = new Product("spoon", ProductUnit.Each,1.99);
+		Product spoon = new Product("spoon", ProductUnit.Each, 1.99);
 		String json = mapper.writeValueAsString(spoon);
 		mvc.perform(MockMvcRequestBuilders.post(URL)
 			.accept(MediaType.APPLICATION_JSON)
@@ -91,7 +86,7 @@ public class ProductControllerTest {
 			.content(json))
 			.andExpect(status().isOk());
 
-		List<Product> expected = Arrays.asList(toothbrush,toothpaste,apples,bananas,spoon);
+		List<Product> expected = Arrays.asList(toothbrush, toothpaste, apples, bananas, spoon);
 		json = mapper.writeValueAsString(expected);
 		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -106,7 +101,7 @@ public class ProductControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(content().string(json));
 
-		List<Product> expected = Arrays.asList(toothbrush,apples,bananas);
+		List<Product> expected = Arrays.asList(toothbrush, apples, bananas);
 		json = mapper.writeValueAsString(expected);
 		mvc.perform(MockMvcRequestBuilders.get(URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
